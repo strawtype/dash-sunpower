@@ -23,15 +23,16 @@ This dashboard visualizes your solar panel production over time, allows you to b
 
 - A **Home Assistant** dashboard for **SunPower** systems using the [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) HACS integration.
 - A **bash script** (`query_panels.sh`) to query **InfluxDB** for power or energy values and save them for Home Assistant sensors.
-- An **example Lovelace dashboard** (`dashboard.yaml`) that uses the queried data.
+- An **example Lovelace dashboard** (`dashboard.yaml`) that uses the queried data.  You need to customize your own panel layout.
 
 ---
 
 ## 🚫 What this is not
 
-- ❌ This code **does not** provide panel-level details you didn’t already have.
+- ❌ This code does **not** provide panel-level details you didn’t already have.
 - ❌ This will **not** work without a functional [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) integration.
 - ❌ It will **not** retroactively populate historical data — InfluxDB will collect data going forward if its a first time setup.
+- ❌ It will **not** automagically create your panel layout.  Use the example to customize your own placement.   
 
 ---
 
@@ -92,11 +93,11 @@ This dashboard visualizes your solar panel production over time, allows you to b
 
 3. **Set up `query_panels.sh`**  
    - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh`).
-   - Don't forget the execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
-   - Adjust InfluxDB connection details, panel count, or paths if you so chose.
+   - Execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
+   - Edit the InfluxDB connection details, panel count, or paths if you so chose.
 
 4. **Update `configuration.yaml`**  
-   - Add the provided `configuration.yaml` additions to your Home Assistant configuration.
+   - Review `configuration.yaml` and add to your own Home Assistant configuration. (sensors, inputs, shell commands)
    - Update any paths you may have changed in /query_panels.sh.
    - Restart Home Assistant.
 
@@ -106,9 +107,11 @@ This dashboard visualizes your solar panel production over time, allows you to b
 6. **Load the Example Dashboard**  
    - Copy `dashboard.yaml` to create a new dashboard.
    - Add it as a new dashboard in Home Assistant’s UI.
+   - Review the notes in dashboard.yaml for customization (colors, thresholds, intervals)
 
 7. **Verify Data Flow**  
-   - Ensure `query_panels.sh` is successfully pulling data from InfluxDB and that the sensors are updating.
+   - Ensure `query_panels.sh` is successfully pulling data from InfluxDB.
+   - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e power_3 -m max -m power`).
    - Adjust entity names if using a different integration or naming convention.
 
 ---
