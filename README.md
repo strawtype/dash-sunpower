@@ -86,33 +86,38 @@ This dashboard visualizes your solar panel production over time, allows you to b
 
 1. **Install Required HACS Integrations** (see Required Integrations above).
 
-2. **Ensure InfluxDB is Running & Collecting Data**  
+2. **Ensure InfluxDB is Running & Collecting Data**
    - This setup relies on InfluxDB v1.xx to store SunPower production data.
    - You can install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository)
    - If setting up InfluxDB for the first time, historical data starts from now onward.
 
-3. **Set up `query_panels.sh`**  
+3. **Set up `query_panels.sh`**
    - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh`).
    - Execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
    - Edit the InfluxDB connection details, panel count, or paths if you so chose.
+   - Run (`query_panels.sh --discovery`) to attempt sensor discovery
 
 4. **Update `configuration.yaml`**  
    - Review `configuration.yaml` and add to your own Home Assistant configuration. (sensors, inputs, shell commands)
-   - Update any paths you may have changed in /query_panels.sh.
+   - Update any paths you may have changed in query_panels.sh.
    - Restart Home Assistant.
 
-5. **Import Automations and Scripts**  
-   - Add `refresh_panels_onselect.yaml`, `refresh_panels_live.yaml`, and `play_panels_timelapse.yaml` to your automations/scripts.
+5. **Verify Data Flow**  
+   - Ensure `query_panels.sh` is successfully pulling data from InfluxDB.
+   - Discover sensors with a first time run (`config/scripts/query_panels.sh --discover`)
+   - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e power_3 -m max -m power`).
+   - Test a date and time with a specific entity to verify it produces a value response.
 
-6. **Load the Example Dashboard**  
+6. **Import Automations and Scripts**  
+   - Add `automation_refresh_panels_onselect.yaml` to you automations
+   - Add `automation_refresh_graph_onlive.yaml` to you automations
+   - Add `script_panels_timelapse.yaml` to you scripts
+
+7. **Load the Example Dashboard**  
    - Copy `dashboard.yaml` to create a new dashboard.
    - Add it as a new dashboard in Home Assistant’s UI.
    - Review the notes in dashboard.yaml for customization (colors, thresholds, intervals)
-
-7. **Verify Data Flow**  
-   - Ensure `query_panels.sh` is successfully pulling data from InfluxDB.
-   - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e power_3 -m max -m power`).
-   - Adjust entity names if using a different integration or naming convention.
+   - Match each panel to a  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power**.  use query_panels.sh --discover
 
 ---
 
