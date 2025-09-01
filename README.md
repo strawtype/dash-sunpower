@@ -75,7 +75,7 @@ This dashboard visualizes your solar panel production over time, allows you to b
 ### Timelapse View
 ![Timelapse](screenshots/1.png)
 
-### Date Selection
+### Energy View
 ![Energy View](screenshots/2.png)
 
 ### Power View
