@@ -120,13 +120,13 @@ This dashboard visualizes your solar panel production over time, allows you to b
    - Add it as a new dashboard in Home Assistant’s UI.
    - Review the notes in dashboard.yaml for customization (colors, thresholds, intervals)
 
-8. **Customize the Dashboard*
+8. **Customize the Dashboard**
    - To accurately place the panels on the dashboard you must know their placement to begin with.  Consult your install documentation or the sunpower app.
    - The sensor id **names have changed over time**.  This currently handles legacy "power_8" type names and newer like "inverter_e00122xxxxxxxxxx_power".
    - Match each panel to its relevant  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power**.  use the results from query_panels.sh --discover
    - Match the main production sensor to **power_key: **power** or **power_meter_pvs6mxxxxxxxxp_power**.
    - If you are using the legacy names you can match it viewing the device id with the serial.  
-   
+
 ---
 
 ## 🧩 Notes & Customization
