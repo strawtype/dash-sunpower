@@ -70,7 +70,7 @@ This dashboard visualizes your solar panel production over time, allows you to b
 
 ---
 
-## 🖼 Example Screenshots
+## 🖼 Screenshots
 
 ### Timelapse View
 ![Timelapse](screenshots/1.png)
@@ -96,7 +96,7 @@ This dashboard visualizes your solar panel production over time, allows you to b
    - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh`).
    - Execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
    - Edit the InfluxDB connection details, panel count, or paths if you so chose.
-   - Run (`query_panels.sh --discovery`) to attempt sensor discovery
+   - Run (`query_panels.sh --discover`) to attempt sensor discovery
 
 4. **Update `configuration.yaml`**  
    - Review `configuration.yaml` and add to your own Home Assistant configuration. (sensors, inputs, shell commands)
