@@ -1,6 +1,6 @@
 # Solar Panel Dashboard for Home Assistant (SunPower + InfluxDB)
 
-![Dashboard Screenshot](screenshots/dashboard_main.png)
+![Dashboard Screenshot](screenshots/3.png)
 
 A Home Assistant dashboard designed for **SunPower** solar panel systems, built using several HACS components and InfluxDB for data storage and querying.
 
@@ -71,14 +71,14 @@ This dashboard visualizes your solar panel production over time, allows you to b
 
 ## 🖼 Example Screenshots
 
-### Main Dashboard
-![Main Dashboard](screenshots/dashboard_main.png)
+### Timelapse View
+![Timelapse](screenshots/1.png)
 
 ### Date Selection
-![Date Selection](screenshots/dashboard_date.png)
+![Energy View](screenshots/2.png)
 
-### Live View
-![Live View](screenshots/dashboard_live.png)
+### Power View
+![Power View](screenshots/3.png)
 
 ---
 
