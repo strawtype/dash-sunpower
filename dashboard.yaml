@@ -1,0 +1,734 @@
+button_card_templates:
+  solar_panel:
+    entity: sensor.timelapse_power_panels
+    show_name: false
+    show_icon: false
+    show_state: true
+    tap_action:
+      action: more-info
+      entity: |
+        [[[
+          return `sensor.${variables.power_key}`;
+        ]]]
+    state_display: |
+      [[[
+        let units
+        let result
+        const updater = states['sensor.power']?.state;                         //force an update when "power" updates, (forces panels to refresh sensor values)
+        const power = states['input_boolean.power_panels']?.state === 'on';    //power, off is energy
+        const latest = states['input_boolean.latest_panels']?.state === 'on';  //live, off is historical
+        const val = latest
+          ? parseFloat(states[`sensor.${variables.power_key}`]?.state)         //POWER SENSOR,   live
+          : parseFloat(entity.attributes?.[variables.power_key]);              //JSON ATTRIBUTE, history
+        if (!power && latest) {                                                //live energy
+          units = "kWh"
+          const produced = parseFloat(states[`sensor.lifetime_${variables.power_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);   // LIFETIME SENSOR - JSON ATTRIBUTE
+          result = Number.isFinite(produced) ? (produced).toFixed(1) : '0';
+        }
+        else if (power) {                                                      //live and history for power  (watts)
+          units = "W"
+          result= Number.isFinite(val) ? (val * 1000).toFixed(0) : '0';
+        }
+        else {                                                                 //history energy (kwh)
+          units = "kWh"
+          result = Number.isFinite(val) ? (val).toFixed(1) : '0';
+        }
+        return `<span>${result}<span style="font-size: clamp(8px, 1.5vw, 20px);"><br>${units}</span></span>`;      //units and font size
+      ]]]
+    styles:
+      card:
+        - border-radius: .1vw
+        - height: 10vw
+        - width: 5vw
+        - margin: 0.2vw
+        - padding: 0vw
+        - box-shadow: none !important
+        - font-size: clamp(10px, 2vw, 30px)
+        - font-weight: bold
+        - color: black
+        - background-color: |
+            [[[
+              const power = states['input_boolean.power_panels']?.state === 'on';
+              const latest = states['input_boolean.latest_panels']?.state === 'on';
+              let val
+              val = latest
+                ? parseFloat(states[`sensor.${variables.power_key}`]?.state)
+                : parseFloat(entity.attributes?.[variables.power_key]);
+
+              if (!power && latest) {
+                const produced = parseFloat(states[`sensor.lifetime_${variables.power_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);  //lifetime sensor - attribute 
+                val = Number.isFinite(produced) ? produced : 0;
+              }
+              if (power) {                                                        //gradiant for POWER mode, adjust to your max panel output in watts
+                const watts = Number.isFinite(val) ? Math.round(val * 1000) : 0;
+                if (watts === 0)  return 'gray';
+                if (watts <= 35)  return '#FFF9C4';
+                if (watts <= 70)  return '#FFF59D';
+                if (watts <= 105) return '#FFF176';
+                if (watts <= 140) return '#FFEE58';
+                if (watts <= 175) return '#FFEB3B';
+                if (watts <= 210) return '#FFC107';
+                if (watts <= 245) return '#FFB300';
+                if (watts <= 280) return '#FFA000';
+                if (watts <= 315) return '#FF8F00';
+                if (watts <= 350) return '#FF6F00';
+                return '#FF6F00';
+              }
+              else {                                                              //gradiant for ENERGY mode, adjust to your daily max panel production in khw                                          
+                const kwh = Number.isFinite(val) ? val : 0;
+                if (kwh === 0)    return 'gray';
+                if (kwh <= .300)  return '#E1F5FE';
+                if (kwh <= .600)  return '#B3E5FC';
+                if (kwh <= .900)  return '#81D4FA';
+                if (kwh <= 1.200) return '#4FC3F7';
+                if (kwh <= 1.500) return '#29B6F6';
+                if (kwh <= 1.800) return '#03A9F4';
+                if (kwh <= 2.100) return '#039BE5';
+                if (kwh <= 2.400) return '#0288D1';
+                if (kwh <= 2.700) return '#0277BD';
+                if (kwh <= 3.000) return '#01579B';
+                return '#01579B';
+              }
+            ]]]
+views:
+  - type: sections
+    max_columns: 4
+    title: Panels
+    path: panels
+    icon: mdi:solar-panel
+    sections:
+      - type: grid
+        cards:
+          - type: vertical-stack
+            cards:
+              - type: entities
+                entities:
+                  - entity: input_datetime.timelapse_day_picker
+                    secondary_info: none
+                    name: Select Date
+            grid_options:
+              columns: full
+              rows: auto
+          - type: custom:mod-card
+            style: |
+              ha-card {
+                  width: 100%;
+                  height: 100%;
+              }
+            card:
+              type: picture-elements
+              image: /local/images/panel_layout_trans.png
+              elements:
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_22   //this is the name of the discovered sensor inverter_e00122xxxxxxxxxx_power
+                  style:
+                    left: 7%
+                    top: 30%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_29
+                  style:
+                    left: 19%
+                    top: 30%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_4
+                  style:
+                    left: 37%
+                    top: 30%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_25
+                  style:
+                    left: 28%
+                    top: 35%
+                  styles:
+                    card:
+                      - height: 10vw
+                      - width: 5vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_28
+                  style:
+                    left: 49%
+                    top: 54%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_31
+                  style:
+                    left: 43%
+                    top: 72%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_24
+                  style:
+                    left: 49%
+                    top: 72%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_5
+                  style:
+                    left: 37%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_32
+                  style:
+                    left: 43%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_21
+                  style:
+                    left: 49%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_30
+                  style:
+                    left: 55%
+                    top: 54%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_26
+                  style:
+                    left: 55%
+                    top: 72%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_6
+                  style:
+                    left: 55%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_19
+                  style:
+                    left: 61%
+                    top: 54%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_3
+                  style:
+                    left: 61%
+                    top: 72%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_10
+                  style:
+                    left: 61%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_27
+                  style:
+                    left: 67%
+                    top: 54%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_16
+                  style:
+                    left: 67%
+                    top: 72%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_15
+                  style:
+                    left: 67%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_13
+                  style:
+                    left: 19%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_8
+                  style:
+                    left: 25%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_17
+                  style:
+                    left: 31%
+                    top: 90%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_14
+                  style:
+                    left: 61.5%
+                    top: 16.5%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_12
+                  style:
+                    left: 67.5%
+                    top: 16.5%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_11
+                  style:
+                    left: 58.5%
+                    top: 30%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_23
+                  style:
+                    left: 70.5%
+                    top: 30%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_7
+                  style:
+                    left: 84%
+                    top: 17%
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_18
+                  style:
+                    left: 93%
+                    top: 8%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_20
+                  style:
+                    left: 93%
+                    top: 17%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power_9
+                  style:
+                    left: 93%
+                    top: 26%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
+                - type: custom:button-card
+                  template: solar_panel
+                  variables:
+                    power_key: power    // power_meter_pvs6mxxxxxxxxp_power
+                  name: TOTAL
+                  show_name: true
+                  show_icon: false
+                  show_state: true
+                  state_display: |
+                    [[[
+                      const power = states['input_boolean.power_panels']?.state === 'on';
+                      const latest = states['input_boolean.latest_panels'].state === 'on';
+                      let units;
+                      if (power) {
+                         units = 'kW';
+                      } else {
+                         units = 'kWh';
+                      }
+
+                      let val;
+                      if (power && latest) {
+                        val = parseFloat(states['sensor.power']?.state ?? 0);
+                      } else if (!power && latest) {
+                        const lifetime = parseFloat(states[`sensor.lifetime_${variables.power_key}`]?.state ?? 0);
+                        const start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
+                        val = lifetime - start;
+                      } else {
+                        val = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
+                      }
+                      const hour = latest
+                        ? (() => {
+                            const lastUpdated = new Date(states['sensor.power'].last_updated);
+                            const h = lastUpdated.getHours().toString().padStart(2, '0');
+                            const m = lastUpdated.getMinutes().toString().padStart(2, '0');
+                            return `${h}:${m}`;
+                          })()
+                        : `${parseInt(states['input_number.timelapse_hour_slider'].state)}:00`;
+                      return `${val.toFixed(1)} ${units} | ${hour}`;
+                    ]]]
+                  style:
+                    left: 16%
+                    top: 60%
+                  styles:
+                    card:
+                      - height: 10vw
+                      - font-size: clamp(12px, 3vw, 32px)
+                      - width: 24vw
+                      - background-color: none
+                      - border-width: 0px
+                      - color: |
+                          [[[
+                            const power = states['input_boolean.power_panels']?.state === 'on';
+                            const latest = states['input_boolean.latest_panels'].state === 'on';
+                            let val;
+                            if (power && latest) {
+                              val = parseFloat(states['sensor.power']?.state ?? 0);
+                            } else if (!power && latest) {
+                              const lifetime = parseFloat(states[`sensor.lifetime_${variables.power_key}`]?.state ?? 0);
+                              const start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
+                              val = lifetime - start;
+                            } else {
+                              val = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
+                            }
+                            if (power) {
+                              if (val <= 0.1)  return 'gray';
+                              if (val <= 1.1)  return '#FFF9C4';
+                              if (val <= 2.2)  return '#FFF59D';
+                              if (val <= 3.3)  return '#FFF176';
+                              if (val <= 4.4)  return '#FFEE58';
+                              if (val <= 5.5)  return '#FFEB3B';
+                              if (val <= 6.6)  return '#FFC107';
+                              if (val <= 7.7)  return '#FFB300';
+                              if (val <= 8.8)  return '#FFA000';
+                              if (val <= 9.9)  return '#FF8F00';
+                              if (val >  9.9)   return'#FF6F00';
+                              return '#FF6F00';
+                            }
+                            else {
+                              if (val < .05 ) return 'gray';
+                              if (val <= 8)   return '#E1F5FE';
+                              if (val <= 16)  return '#B3E5FC';
+                              if (val <= 24)  return '#81D4FA';
+                              if (val <= 32)  return '#4FC3F7';
+                              if (val <= 40)  return '#29B6F6';
+                              if (val <= 48)  return '#03A9F4';
+                              if (val <= 56)  return '#039BE5';
+                              if (val <= 64)  return '#0288D1';
+                              if (val <= 72)  return '#0277BD';
+                              if (val >  72 ) return '#01579B';
+                            }
+                          ]]]
+            grid_options:
+              columns: full
+          - type: picture-elements
+            image: /local/images/panel_layout_trans.png
+            elements:
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.power_panels
+                    state: 'on'
+                elements:
+                  - type: custom:apexcharts-card
+                    experimental:
+                      color_threshold: true
+                    card_mod:
+                      style: |
+                        ha-card {
+                          border: none;
+                        }
+                    style:
+                      top: 42px
+                      left: 49%
+                      width: 100%
+                    header:
+                      show: false
+                    graph_span: 24h
+                    now:
+                      show: false
+                    span:
+                      start: day
+                    apex_config:
+                      chart:
+                        height: 110
+                        toolbar:
+                          show: false
+                      xaxis:
+                        labels:
+                          show: true
+                        axisTicks:
+                          show: false
+                        axisBorder:
+                          show: false
+                      yaxis:
+                        tickAmount: 10
+                        labels:
+                          show: false
+                        axisTicks:
+                          show: false
+                        axisBorder:
+                          show: false
+                      grid:
+                        show: false
+                      tooltip:
+                        enabled: false
+                    series:
+                      - entity: sensor.timelapse_power_graph
+                        type: area
+                        name: Power
+                        stroke_width: 0
+                        color_threshold:
+                          - value: 0
+                            color: gray
+                          - value: 100
+                            color: '#FFF9C4'
+                          - value: 1000
+                            color: '#FFF59D'
+                          - value: 1900
+                            color: '#FFF176'
+                          - value: 2800
+                            color: '#FFEE58'
+                          - value: 3700
+                            color: '#FFEB3B'
+                          - value: 4600
+                            color: '#FFC107'
+                          - value: 5500
+                            color: '#FFB300'
+                          - value: 6400
+                            color: '#FFA000'
+                          - value: 7300
+                            color: '#FF8F00'
+                          - value: 8200
+                            color: '#FF6F00'
+                        data_generator: |
+                          const values = entity.attributes?.values || [];
+                          const base = new Date();
+                          base.setHours(0, 0, 0, 0);
+                          return values.map((v, i) => {
+                            const t = new Date(base.getTime() + i * 3600000);
+                            return [t.getTime(), v * 1000];
+                          });
+              - type: conditional
+                conditions:
+                  - entity: input_boolean.power_panels
+                    state: 'off'
+                elements:
+                  - type: custom:apexcharts-card
+                    experimental:
+                      color_threshold: true
+                    card_mod:
+                      style: |
+                        ha-card {
+                          border: none;
+                        }
+                    style:
+                      top: 42px
+                      left: 49%
+                      width: 100%
+                    header:
+                      show: false
+                    graph_span: 24h
+                    now:
+                      show: false
+                    span:
+                      start: day
+                    apex_config:
+                      chart:
+                        height: 110
+                        toolbar:
+                          show: false
+                      xaxis:
+                        labels:
+                          show: true
+                        axisTicks:
+                          show: false
+                        axisBorder:
+                          show: false
+                      yaxis:
+                        tickAmount: 10
+                        labels:
+                          show: false
+                        axisTicks:
+                          show: false
+                        axisBorder:
+                          show: false
+                      grid:
+                        show: false
+                      tooltip:
+                        enabled: false
+                    series:
+                      - entity: sensor.timelapse_power_graph
+                        type: area
+                        name: Power
+                        stroke_width: 0
+                        color_threshold:
+                          - value: 0
+                            color: gray
+                          - value: 9
+                            color: '#E1F5FE'
+                          - value: 18
+                            color: '#B3E5FC'
+                          - value: 27
+                            color: '#81D4FA'
+                          - value: 36
+                            color: '#4FC3F7'
+                          - value: 45
+                            color: '#29B6F6'
+                          - value: 54
+                            color: '#03A9F4'
+                          - value: 63
+                            color: '#039BE5'
+                          - value: 72
+                            color: '#0288D1'
+                          - value: 81
+                            color: '#0277BD'
+                          - value: 90
+                            color: '#01579B'
+                        data_generator: |
+                          const values = entity.attributes?.values || [];
+                          const base = new Date();
+                          base.setHours(0, 0, 0, 0);
+                          return values.map((v, i) => {
+                            const t = new Date(base.getTime() + i * 3600000);
+                            return [t.getTime(), v];
+                          });
+              - type: custom:mushroom-number-card
+                entity: input_number.timelapse_hour_slider
+                icon_color: grey
+                tap_action:
+                  action: none
+                fill_container: true
+                display_mode: slider
+                icon: ''
+                primary_info: none
+                secondary_info: none
+                style:
+                  top: 30px
+                  left: 50%
+                  width: 100%
+                card_mod:
+                  style: |
+                    ha-card {
+                      background: transparent;
+                      box-shadow: none;
+                      border: none;
+                      overflow: hidden;
+                      opacity: {% if states('input_boolean.latest_panels') == 'off' %}40%{% else %}0%{% endif %};
+                      transition: opacity 0.5s ease;
+                      --control-height: 55px;
+                    }
+                    mushroom-shape-icon {
+                      display: none !important;
+                    }
+                    mushroom-state-item {
+                      padding-left: 0px !important;
+                    }
+            grid_options:
+              rows: 1.5
+              columns: full
+          - type: grid
+            columns: 3
+            square: false
+            cards:
+              - type: custom:button-card
+                entity: script.script_panels_play_v4
+                icon: mdi:play-speed
+                name: Timelapse
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: none
+                styles:
+                  card:
+                    - height: 90px
+                    - font-size: 16px
+                    - justify-content: center
+                    - padding: 8px
+                  icon:
+                    - color: >
+                        [[[ return states['script.script_panels_play_v4'].state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
+                  name:
+                    - color: white
+              - type: custom:button-card
+                entity: input_boolean.latest_panels
+                icon: mdi:sun-clock-outline
+                name: Live View
+                tap_action:
+                  action: toggle
+                hold_action:
+                  action: none
+                styles:
+                  card:
+                    - height: 90px
+                    - font-size: 16px
+                    - justify-content: center
+                    - padding: 8px
+                  icon:
+                    - color: >
+                        [[[ return entity.state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
+                  name:
+                    - color: white
+              - type: custom:button-card
+                entity: input_boolean.power_panels
+                tap_action:
+                  action: toggle
+                name: |
+                  [[[ return entity.state === 'on' ? "Power" : "Energy"; ]]]
+                icon: >
+                  [[[ return entity.state === 'on' ? "mdi:flash" : "mdi:meter-electric-outline"; ]]]
+                styles:
+                  card:
+                    - height: 90px
+                    - font-size: 16px
+                    - justify-content: center
+                    - padding: 8px
+                  icon:
+                    - color: >
+                        [[[ return entity.state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
+                  name:
+                    - color: white
+            grid_options:
+              columns: full
+        column_span: 4
+    cards: []
+    header:
+      layout: start
+      badges_position: bottom
+      badges_wrap: wrap
