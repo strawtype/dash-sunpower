@@ -38,14 +38,14 @@ queryflux () {
     --data-urlencode "db=${DATABASE}" \
     --data-urlencode "u=${USERNAME}" \
     --data-urlencode "p=${PASSWORD}" \
-    --data-urlencode "q=${QUERY}" 
+    --data-urlencode "q=${QUERY}"
 }
 
 
 discover() {
   echo "Discovering lifetime_power and matching power sensors..."
 
-  QUERY='SHOW TAG VALUES FROM "kWh" WITH KEY = "entity_id"' 
+  QUERY='SHOW TAG VALUES FROM "kWh" WITH KEY = "entity_id"'
   readarray -t lifetime_entities < <(queryflux | jq -r '.results[0].series[0].values[][1]' | grep 'lifetime_power')
 
   > "${DATA_DIR}/entities.txt"
@@ -105,7 +105,7 @@ writepanels () {
     mapfile -t entities < <(sed 's/^- //' "$ENTITIES")
     if [[ "$MODE" == "ENERGY" || "$MODE" == "LIVE" ]]; then
       #echo "Using $ENTITIES for panels"
-      for i in "${!entities[@]}"; do   
+      for i in "${!entities[@]}"; do
         if [[ "${entities[i]}" == *power* ]]; then
           entities[i]="${entities[i]/power/lifetime_power}"
         fi
@@ -193,7 +193,10 @@ D_START=$(date -u -d "@$(date -d "${DATE} 00:00:00" +%s)" +"%Y-%m-%dT%H:%M:%SZ")
 T_START=$(date -u -d "@$(date -d "${TODAY} 00:00:00" +%s)" +"%Y-%m-%dT%H:%M:%SZ")
 
 if [ -n "$ENTITY" ]; then   #tests
-  QUERY="SELECT ${POLL}(value) FROM autogen.${UNITS} WHERE entity_id = '${EN}${ENTITY}' AND time >= '${H_START}' AND time <= '${H_END}'"
+  if [[ "$MODE" == "ENERGY" || "$MODE" == "LIVE" ]]; then
+      ENTITY="${ENTITY/power/lifetime_power}"
+  fi
+  QUERY="SELECT ${POLL}(value) FROM autogen.${UNITS} WHERE entity_id = '${ENTITY}' AND time >= '${H_START}' AND time <= '${H_END}'"
   queryflux | jq -r '.results[0].series[0].values[0][1] // 0' 2>/dev/null || echo "0"
 
 else

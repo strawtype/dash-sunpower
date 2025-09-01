@@ -105,7 +105,7 @@ This dashboard visualizes your solar panel production over time, allows you to b
 
 5. **Verify Data Flow**  
    - Ensure `query_panels.sh` is successfully pulling data from InfluxDB.
-   - Discover sensors with a first time run (`config/scripts/query_panels.sh --discover`)
+   - Discover sensors with a first time run (`/config/scripts/query_panels.sh --discover`)
    - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e power_3 -m max -m power`).
    - Test a date and time with a specific entity to verify it produces a value response.
 
