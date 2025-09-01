@@ -74,7 +74,7 @@ button_card_templates:
                 if (watts <= 350) return '#FF6F00';
                 return '#FF6F00';
               }
-              else {                                                              //gradiant for ENERGY mode, adjust to your daily max panel production in khw                                          
+              else {                                                              //gradiant for ENERGY mode, adjust to your daily max panel production in khw
                 const kwh = Number.isFinite(val) ? val : 0;
                 if (kwh === 0)    return 'gray';
                 if (kwh <= .300)  return '#E1F5FE';
@@ -668,7 +668,7 @@ views:
             square: false
             cards:
               - type: custom:button-card
-                entity: script.script_panels_play_v4
+                entity: script.script_panels_timelapse
                 icon: mdi:play-speed
                 name: Timelapse
                 tap_action:
@@ -683,7 +683,7 @@ views:
                     - padding: 8px
                   icon:
                     - color: >
-                        [[[ return states['script.script_panels_play_v4'].state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
+                        [[[ return states['script.script_panels_timelapse'].state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
                   name:
                     - color: white
               - type: custom:button-card

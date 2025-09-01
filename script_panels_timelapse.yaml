@@ -1,0 +1,29 @@
+sequence:
+  - data:
+      value: 2
+    action: input_number.set_value
+    target:
+      entity_id: input_number.timelapse_hour_slider
+  - repeat:
+      count: 20
+      sequence:
+        - variables:
+            current: "{{ states('input_number.timelapse_hour_slider') | int }}"
+            next: "{{ current + 1 }}"
+        - data:
+            entity_id: input_number.timelapse_hour_slider
+            value: "{{ next }}"
+          action: input_number.set_value
+        - delay:
+            hours: 0
+            minutes: 0
+            seconds: 0
+            milliseconds: 800
+  - data:
+      value: 24
+    action: input_number.set_value
+    target:
+      entity_id: input_number.timelapse_hour_slider
+alias: Script - Panels Timelapse
+mode: single
+description: ""
