@@ -59,10 +59,14 @@ discover() {
     if echo "$result" | jq -e '.results[0].series[0].values and (.results[0].series[0].values | length > 0)' > /dev/null 2>&1; then
       echo "Found data for $power_entity matched from $lifetime_entity"
       echo "- $power_entity" >> "${DATA_DIR}/entities.txt"
-    else
-      echo "No data for $power_entity (from $lifetime_entity)"
     fi
   done
+  echo ""
+  echo "Use below in configuration.yaml for the timelapse_power_panels json_attributes"
+  echo ""
+  cat  ${DATA_DIR}/entities.txt
+  echo ""
+  echo "Use above in configuration.yaml for the timelapse_power_panels json_attributes"
 }
 
 
