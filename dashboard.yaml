@@ -22,7 +22,7 @@ button_card_templates:
           : parseFloat(entity.attributes?.[variables.power_key]);              //JSON ATTRIBUTE, HISTORY uses power_key to match the historical attribute
         if (!power && latest) {                                                //live energy
           units = "kWh"
-          const lifetime_key = variables.power_key.replace(/power$/, 'lifetime_power');
+          const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
           const produced = parseFloat(states[`sensor.${lifetime_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);   // LIFETIME SENSOR - JSON ATTRIBUTE
           result = Number.isFinite(produced) ? (produced).toFixed(1) : '0';
         }
@@ -57,7 +57,7 @@ button_card_templates:
                 : parseFloat(entity.attributes?.[variables.power_key]);
 
               if (!power && latest) {
-                const lifetime_key = variables.power_key.replace(/power$/, 'lifetime_power');
+                const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                 const produced = parseFloat(states[`sensor.${lifetime_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);  //lifetime sensor - attribute
                 val = Number.isFinite(produced) ? produced : 0;
               }
@@ -124,7 +124,8 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_22   //this is the name of the discovered sensor inverter_e00122xxxxxxxxxx_power
+                    power_key: >-
+                      power_22
                   style:
                     left: 7%
                     top: 30%
@@ -370,7 +371,7 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power    // power_meter_pvs6mxxxxxxxxp_power
+                    power_key: power
                   name: TOTAL
                   show_name: true
                   show_icon: false
@@ -390,7 +391,7 @@ views:
                       if (power && latest) {
                         val = parseFloat(states['sensor.power']?.state ?? 0);
                       } else if (!power && latest) {
-                        const lifetime_key = variables.power_key.replace(/power$/, 'lifetime_power');
+                        const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                         const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
                         const start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
                         val = lifetime - start;
@@ -425,7 +426,7 @@ views:
                             if (power && latest) {
                               val = parseFloat(states['sensor.power']?.state ?? 0);
                             } else if (!power && latest) {
-                              const lifetime_key = variables.power_key.replace(/power$/, 'lifetime_power');
+                              const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                               const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
                               const start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
                               val = lifetime - start;
@@ -687,7 +688,8 @@ views:
                     - padding: 8px
                   icon:
                     - color: >
-                        [[[ return states['script.script_panels_timelapse'].state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
+                        [[[ return
+                        states['script.script_panels_timelapse'].state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
                   name:
                     - color: white
               - type: custom:button-card
@@ -706,7 +708,8 @@ views:
                     - padding: 8px
                   icon:
                     - color: >
-                        [[[ return entity.state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
+                        [[[ return entity.state === 'on' ? '#FFB300' :
+                        '#03A9F4'; ]]]
                   name:
                     - color: white
               - type: custom:button-card
@@ -716,7 +719,8 @@ views:
                 name: |
                   [[[ return entity.state === 'on' ? "Power" : "Energy"; ]]]
                 icon: >
-                  [[[ return entity.state === 'on' ? "mdi:flash" : "mdi:meter-electric-outline"; ]]]
+                  [[[ return entity.state === 'on' ? "mdi:flash" :
+                  "mdi:meter-electric-outline"; ]]]
                 styles:
                   card:
                     - height: 90px
@@ -725,7 +729,8 @@ views:
                     - padding: 8px
                   icon:
                     - color: >
-                        [[[ return entity.state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
+                        [[[ return entity.state === 'on' ? '#FFB300' :
+                        '#03A9F4'; ]]]
                   name:
                     - color: white
             grid_options:
