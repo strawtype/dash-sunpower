@@ -60,12 +60,12 @@ This dashboard visualizes your solar panel production over time, allows you to b
 
 | File / Folder                       | Purpose                                                   |
 |------------------------------------|-----------------------------------------------------------|
-| `query_panels.sh`                   | Bash script to query InfluxDB and save power/energy data   |
+| `query_panels.sh`                   | Bash script to query InfluxDB for power/energy data   |
 | `configuration.yaml`                | Home Assistant configuration additions                    |
 | `dashboard.yaml`                    | Example Lovelace dashboard                                |
-| `automations/refresh_panels_onselect.yaml` | Automation to refresh panels when selections change   |
-| `automations/refresh_panels_live.yaml`     | Automation to refresh graphs/panels in live mode (default: 5 min) |
-| `script/play_panels_timelapse.yaml` | Script to advance hour selection for timelapse playback    |
+| `automation_refresh_panels_onselect.yaml` | Automation to refresh panels when selections change   |
+| `automation_refresh_graph_onlive.yaml`     | Automation to refresh graphs/panels in live mode (default: 5 min) |
+| `script_panels_timelapse.yaml` | Timelapse playback script   |
 
 ---
 
