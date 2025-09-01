@@ -1,0 +1,56 @@
+influxdb:
+  host: localhost
+  port: 8086
+  database: homeassistant
+  username: !secret influxdb_user
+  password: !secret influxdb_pass
+  max_retries: 3
+  default_measurement: state
+
+
+input_number:
+  timelapse_hour_slider:
+    name: Hour of Day
+    min: 0
+    max: 24
+    step: 1
+    unit_of_measurement: h
+    icon: mdi:clock-outline
+
+input_datetime:
+  timelapse_day_picker:
+    name: Select Day
+    has_date: true
+    has_time: false
+    icon: mdi:calendar
+
+input_boolean:
+  latest_panels:
+    name: Latest Panels
+    initial: true
+  power_panels:
+    name: Power Panels
+    initial: true
+
+command_line:
+  - sensor:
+      name: timelapse_power_graph
+      command: "cat /config/power/graph.json"
+      value_template: "{{ value_json.values[0] }}"
+      json_attributes:
+        - values
+      scan_interval: 99999
+  - sensor:
+      name: timelapse_power_panels
+      command: "cat /config/power/panels.json"
+      scan_interval: 99999
+      value_template: "{{ value_json.power }}"
+      json_attributes:
+        - power_32
+        - power_31
+          ..           /replace all of these attributes with the output of  /config/scripts/query_panels.sh --discover in /config/power/entities.txt
+        - power_3
+        - power
+
+shell_command:
+  query_panels: "/config/scripts/query_panels.sh -d {{ day }} -h {{ hour }} -m {{ mode }}"
