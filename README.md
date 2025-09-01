@@ -91,12 +91,13 @@ This dashboard visualizes your solar panel production over time, allows you to b
    - This setup relies on InfluxDB v1.xx to store SunPower production data.
    - You can install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository)
    - If setting up InfluxDB for the first time, historical data starts from now onward.
+   - Create a read-only user with access to the homeassistant database.
 
 3. **Set up `query_panels.sh`**
    - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh`).
    - Execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
    - Edit the InfluxDB connection details or paths if you so chose.
-   - Run (`query_panels.sh --discover`) to attempt sensor discovery.
+   - Run (`query_panels.sh --discover`) to attempt sensor discovery. You will use this output in configuration.yaml later
 
 4. **Update `configuration.yaml`**  
    - Review `configuration.yaml` and add to your own Home Assistant configuration. (sensors, inputs, shell commands)
@@ -105,21 +106,27 @@ This dashboard visualizes your solar panel production over time, allows you to b
 
 5. **Verify Data Flow**  
    - Ensure `query_panels.sh` is successfully pulling data from InfluxDB.
-   - Discover sensors with a first time run (`/config/scripts/query_panels.sh --discover`)
+   - Review /config/power/entities.txt, it should exist after running (`/config/scripts/query_panels.sh --discover`)
    - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e power_3 -m max -m power`).
    - Test a date and time with a specific entity to verify it produces a value response.
 
 6. **Import Automations and Scripts**  
-   - Add `automation_refresh_panels_onselect.yaml` to you automations
-   - Add `automation_refresh_graph_onlive.yaml` to you automations
-   - Add `script_panels_timelapse.yaml` to you scripts
+   - Add `automation_refresh_panels_onselect.yaml` to your automations
+   - Add `automation_refresh_graph_onlive.yaml` to your automations
+   - Add `script_panels_timelapse.yaml` to your scripts
 
 7. **Load the Example Dashboard**  
    - Copy `dashboard.yaml` to create a new dashboard.
    - Add it as a new dashboard in Home Assistant’s UI.
    - Review the notes in dashboard.yaml for customization (colors, thresholds, intervals)
-   - Match each panel to a  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power**.  use query_panels.sh --discover
 
+8. **Customize the Dashboard*
+   - To accurately place the panels on the dashboard you must know their placement to begin with.  Consult your install documentation or the sunpower app.
+   - The sensor id **names have changed over time**.  This currently handles legacy "power_8" type names and newer like "inverter_e00122xxxxxxxxxx_power".
+   - Match each panel to its relevant  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power**.  use the results from query_panels.sh --discover
+   - Match the main production sensor to **power_key: **power** or **power_meter_pvs6mxxxxxxxxp_power**.
+   - If you are using the legacy names you can match it viewing the device id with the serial.  
+   
 ---
 
 ## 🧩 Notes & Customization
