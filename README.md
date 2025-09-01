@@ -66,6 +66,7 @@ This dashboard visualizes your solar panel production over time, allows you to b
 | `automation_refresh_panels_onselect.yaml` | Automation to refresh panels when selections change   |
 | `automation_refresh_graph_onlive.yaml`     | Automation to refresh graphs/panels in live mode (default: 5 min) |
 | `script_panels_timelapse.yaml` | Timelapse playback script   |
+| `panel_layout_trans.png` | transparent or guide background image expected in /config/www/images/
 
 ---
 
