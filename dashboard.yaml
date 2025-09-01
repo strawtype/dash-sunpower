@@ -15,14 +15,15 @@ button_card_templates:
         let units
         let result
         const updater = states['sensor.power']?.state;                         //force an update when "power" updates, (forces panels to refresh sensor values)
-        const power = states['input_boolean.power_panels']?.state === 'on';    //power, off is energy
-        const latest = states['input_boolean.latest_panels']?.state === 'on';  //live, off is historical
+        const power = states['input_boolean.power_panels']?.state === 'on';    //power mode, off is energy
+        const latest = states['input_boolean.latest_panels']?.state === 'on';  //live mode , off is historical
         const val = latest
-          ? parseFloat(states[`sensor.${variables.power_key}`]?.state)         //POWER SENSOR,   live
-          : parseFloat(entity.attributes?.[variables.power_key]);              //JSON ATTRIBUTE, history
+          ? parseFloat(states[`sensor.${variables.power_key}`]?.state)         //POWER SENSOR, LIVE  uses power_key to match the real sensor
+          : parseFloat(entity.attributes?.[variables.power_key]);              //JSON ATTRIBUTE, HISTORY uses power_key to match the historical attribute
         if (!power && latest) {                                                //live energy
           units = "kWh"
-          const produced = parseFloat(states[`sensor.lifetime_${variables.power_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);   // LIFETIME SENSOR - JSON ATTRIBUTE
+          const lifetime_key = variables.power_key.replace(/power$/, 'lifetime_power');
+          const produced = parseFloat(states[`sensor.${lifetime_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);   // LIFETIME SENSOR - JSON ATTRIBUTE
           result = Number.isFinite(produced) ? (produced).toFixed(1) : '0';
         }
         else if (power) {                                                      //live and history for power  (watts)
@@ -56,7 +57,8 @@ button_card_templates:
                 : parseFloat(entity.attributes?.[variables.power_key]);
 
               if (!power && latest) {
-                const produced = parseFloat(states[`sensor.lifetime_${variables.power_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);  //lifetime sensor - attribute 
+                const lifetime_key = variables.power_key.replace(/power$/, 'lifetime_power');
+                const produced = parseFloat(states[`sensor.${lifetime_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);  //lifetime sensor - attribute
                 val = Number.isFinite(produced) ? produced : 0;
               }
               if (power) {                                                        //gradiant for POWER mode, adjust to your max panel output in watts
@@ -388,7 +390,8 @@ views:
                       if (power && latest) {
                         val = parseFloat(states['sensor.power']?.state ?? 0);
                       } else if (!power && latest) {
-                        const lifetime = parseFloat(states[`sensor.lifetime_${variables.power_key}`]?.state ?? 0);
+                        const lifetime_key = variables.power_key.replace(/power$/, 'lifetime_power');
+                        const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
                         const start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
                         val = lifetime - start;
                       } else {
@@ -422,7 +425,8 @@ views:
                             if (power && latest) {
                               val = parseFloat(states['sensor.power']?.state ?? 0);
                             } else if (!power && latest) {
-                              const lifetime = parseFloat(states[`sensor.lifetime_${variables.power_key}`]?.state ?? 0);
+                              const lifetime_key = variables.power_key.replace(/power$/, 'lifetime_power');
+                              const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
                               const start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
                               val = lifetime - start;
                             } else {
