@@ -139,6 +139,8 @@ writepanels () {
   queryflux | jq -s -r '.[0].results[0].series[]? | { ((.tags.entity_id | sub("^lifetime_"; ""))): (.values[0][1] // 0 | tonumber ) }' | jq -s add > "$PANELS_OUT"
 }
 
+mkdir -p $DATA_DIR
+
 if [[ "$1" == "--discover" ]]; then
   discover
   exit 0
