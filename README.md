@@ -61,8 +61,8 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 | File / Folder                       | Purpose                                                   |
 |------------------------------------|-----------------------------------------------------------|
 | `query_panels.sh`                   | Bash script to query InfluxDB for power/energy data   |
-| `configuration.yaml`                | Home Assistant configuration additions                    |
-| `dashboard.yaml`                    | Example Lovelace dashboard                                |
+| `configuration.yaml`                | Required changes for Home Assistant's configuration.yaml  |
+| `dashboard.yaml`                    | Example Home Assistant dashboard  |
 | `automation_refresh_panels_onselect.yaml` | Automation to refresh panels when selections change   |
 | `automation_refresh_graph_onlive.yaml`     | Automation to refresh graphs/panels in live mode (default: 5 min) |
 | `script_panels_timelapse.yaml` | Timelapse playback script   |
@@ -88,18 +88,17 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 1. **Install Required HACS Integrations** (see Required Integrations above).
 
 2. **Ensure InfluxDB is Running & Collecting Data**
-   - This setup relies on InfluxDB v1.xx to store SunPower production data.  Skip this step if already setup.
-   - Install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository)
-   - If setting up InfluxDB for the first time, historical data starts from now onward.
-   - After installing, create at least 1 new user with **read/write** access to the "homeassistant" database. (e.g., `homeassistant`).
-   - See the included configuration.yaml for an example **INFLUXBD** configuration. Add to it your own configuration.yaml
-     - You can save the credentials in secrets.yaml as
+(This setup relies on InfluxDB v1.xx to store SunPower production data.  See **Optional**.)
+  - Install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository).  If setting up InfluxDB for the first time, historical data starts from now onward.
+  - Create at least 1 new user with **read/write** access to the "homeassistant" database. (e.g., `homeassistant`).
+  - See the included **configuration.yaml** for a sample **INFLUXBD** configuration. Add to it your own configuration.yaml
+     - Save the credentials in secrets.yaml as
      ```
      influxdb_user: homeassistant
-     influxdb_pass: password
+     influxdb_pass: yourpassword
      ```
-   - Restart Home Assistant
-   - **Optionally** create a new user with **read-only** access to the homeassistant database for the query_panels.sh script.  (e.g., `powermonitor`)
+  - Restart Home Assistant
+  - **Optional:** create a new user with **read-only** access to the homeassistant database for the query_panels.sh script.  (e.g., `powermonitor`)
 
 3. **Set up `query_panels.sh`**
    - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh`).
@@ -131,10 +130,10 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 8. **Customize the Dashboard**
    - To accurately place the panels on the dashboard you must know their placement to begin with.  Consult your install documentation or the sunpower app.
-   - The sensor id **names have changed over time**.  This currently handles legacy "power_8" type names and newer like "inverter_e00122xxxxxxxxxx_power".
-   - Match each panel to its relevant  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power**.  use the results from query_panels.sh --discover
+   - The sensor id names have changed over time but they are usually "power_8" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
+   - In `dashboard.yaml` match each panel (card) to its relevant  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power** entity_id.  Use the results from query_panels.sh --discover
    - Match the main production sensor to **power_key: **power** or **power_meter_pvs6mxxxxxxxxp_power**.
-   - If you are using the legacy names you can match it viewing the device id with the serial.  
+   - If you are using the legacy names, the device ID includes the serial number to help you identify each panel.
 
 ---
 
