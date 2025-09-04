@@ -1,3 +1,4 @@
+#INFLUXBD
 influxdb:
   host: localhost
   port: 8086
@@ -7,7 +8,7 @@ influxdb:
   max_retries: 3
   default_measurement: state
 
-
+### TIME OF DAY SELECTION
 input_number:
   timelapse_hour_slider:
     name: Hour of Day
@@ -17,6 +18,7 @@ input_number:
     unit_of_measurement: h
     icon: mdi:clock-outline
 
+### DATE SELECTION
 input_datetime:
   timelapse_day_picker:
     name: Select Day
@@ -26,31 +28,30 @@ input_datetime:
 
 input_boolean:
   latest_panels:
-    name: Latest Panels
+    name: Latest Panels   ### "LIVE" LATEST DATA TOGGLE
     initial: true
   power_panels:
-    name: Power Panels
+    name: Power Panels    ###  ENERGY/POWER TOGGLE
     initial: true
 
 command_line:
   - sensor:
-      name: timelapse_power_graph
-      command: "cat /config/power/graph.json"
+      name: timelapse_power_graph   ### GRAPH sensor
+      command: "cat /config/power/graph.json"   ### MUST MATCH ${DATA_DIR} in panels_query.sh
       value_template: "{{ value_json.values[0] }}"
       json_attributes:
         - values
       scan_interval: 99999
   - sensor:
-      name: timelapse_power_panels
-      command: "cat /config/power/panels.json"
+      name: timelapse_power_panels   ### PANELS, all of them, are a single sensor, in multiple attributes
+      command: "cat /config/power/panels.json"   ### MUST MATCH ${DATA_DIR} in panels_query.sh
       scan_interval: 99999
       value_template: "{{ value_json.power }}"
       json_attributes:
         - power_32
-        - power_31
-          ..           /replace all of these attributes with the output of  /config/scripts/query_panels.sh --discover in /config/power/entities.txt
+        - power_31   ### replace these attributes with the output of  /config/scripts/query_panels.sh --discover or output in /config/power/entities.txt
         - power_3
         - power
 
-shell_command:
+shell_command:   ### call to query_panels.sh script
   query_panels: "/config/scripts/query_panels.sh -d {{ day }} -h {{ hour }} -m {{ mode }}"

@@ -6,7 +6,7 @@ INFLUXDB_HOST="localhost:8086"
      PASSWORD="password"
      DATABASE="homeassistant"
 
-     DATA_DIR="/config/power"
+     DATA_DIR="/config/power"  ### files written by this script
      ENTITIES="${DATA_DIR}/entities.txt"
     GRAPH_OUT="${DATA_DIR}/graph.json"
    PANELS_OUT="${DATA_DIR}/panels.json"
@@ -46,7 +46,12 @@ discover() {
   echo "Discovering lifetime_power and matching power sensors..."
 
   QUERY='SHOW TAG VALUES FROM "kWh" WITH KEY = "entity_id"'
-  readarray -t lifetime_entities < <(queryflux | jq -r '.results[0].series[0].values[][1]' | grep 'lifetime_power')
+  readarray -t lifetime_entities < <(queryflux | jq -r '.results[0].series[0].values[][1] // empty' | grep 'lifetime_power')
+
+  if [ ${#lifetime_entities[@]} -eq 0 ]; then
+    echo "No lifetime_power entities found."
+    exit 0
+  else
 
   > "${DATA_DIR}/entities.txt"
   for lifetime_entity in "${lifetime_entities[@]}"; do
