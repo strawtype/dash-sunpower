@@ -2,7 +2,7 @@
 
 ####Config####
 INFLUXDB_HOST="localhost:8086"
-     USERNAME="user"
+     USERNAME="powermonitor"
      PASSWORD="password"
      DATABASE="homeassistant"
 

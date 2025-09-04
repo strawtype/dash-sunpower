@@ -88,15 +88,23 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 1. **Install Required HACS Integrations** (see Required Integrations above).
 
 2. **Ensure InfluxDB is Running & Collecting Data**
-   - This setup relies on InfluxDB v1.xx to store SunPower production data.
-   - You can install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository)
+   - This setup relies on InfluxDB v1.xx to store SunPower production data.  Skip this step if already setup.
+   - Install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository)
    - If setting up InfluxDB for the first time, historical data starts from now onward.
-   - Create a read-only user with access to the homeassistant database.
+   - After installing, create at least 1 new user with **read/write** access to the "homeassistant" database. (e.g., `homeassistant`).
+   - See the included configuration.yaml for an example **INFLUXBD** configuration. Add to it your own configuration.yaml
+     - You can save the credentials in secrets.yaml as
+     ```
+     influxdb_user: homeassistant
+     influxdb_pass: password
+     ```
+   - Restart Home Assistant
+   - **Optionally** create a new user with **read-only** access to the homeassistant database for the query_panels.sh script.  (e.g., `powermonitor`)
 
 3. **Set up `query_panels.sh`**
    - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh`).
    - Execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
-   - Edit the InfluxDB connection details.
+   - Edit the InfluxDB connection details. (e.g., `homeassistant` or `powermonitor`)
    - Check the **${DATA_DIR}** path works for your Home Assistant install. `configuration.yaml` will need an update if changed.
    - Run (`query_panels.sh --discover`) to attempt sensor discovery. You will use this output in configuration.yaml later
 
