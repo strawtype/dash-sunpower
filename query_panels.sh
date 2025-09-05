@@ -61,6 +61,9 @@ discover() {
 
   > "${DATA_DIR}/entities.txt"
   for lifetime_entity in "${lifetime_entities[@]}"; do
+    if [[ "$lifetime_entity" == "*c_power" || "$lifetime_entity" == "*pv_power" ]]; then  #skip consumption and virtual.  thanks! u/badxhabit28
+      continue
+    fi
     power_entity="${lifetime_entity/_lifetime/}"
     power_entity="${power_entity/lifetime_/}"
 
