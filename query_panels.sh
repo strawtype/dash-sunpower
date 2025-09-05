@@ -10,7 +10,7 @@ INFLUXDB_HOST="localhost:8086"
      ENTITIES="${DATA_DIR}/entities.txt"
     GRAPH_OUT="${DATA_DIR}/graph.json"
    PANELS_OUT="${DATA_DIR}/panels.json"
-  PANEL_COUNT=30  #ignored for discovered
+  PANEL_COUNT=30  #ignored after --discover
 ####Config end###
 
 usage () {
@@ -34,12 +34,18 @@ usage () {
 
 
 queryflux () {
-  curl -sG http://${INFLUXDB_HOST}/query \
+  local query_result
+  if query_result=$(curl -sG http://${INFLUXDB_HOST}/query \
     --data-urlencode "db=${DATABASE}" \
     --data-urlencode "u=${USERNAME}" \
     --data-urlencode "p=${PASSWORD}" \
-    --data-urlencode "q=${QUERY}"
+    --data-urlencode "q=${QUERY}"); then
+     echo "$query_result"
+  else
+    echo "Query failed. Is InfluxDB running?"
+  fi
 }
+
 
 
 discover() {
@@ -51,7 +57,7 @@ discover() {
   if [ ${#lifetime_entities[@]} -eq 0 ]; then
     echo "No lifetime_power entities found."
     exit 0
-  else
+  fi
 
   > "${DATA_DIR}/entities.txt"
   for lifetime_entity in "${lifetime_entities[@]}"; do
@@ -78,7 +84,8 @@ discover() {
 writegraph () {
   local entity
   if [[ -s "$ENTITIES" ]]; then
-    local power=$(sed 's/^- //' "$ENTITIES" | grep -E '^power$|_power$' | head -n 1)
+    local power
+    power=$(sed 's/^- //' "$ENTITIES" | grep -E '^power$|_power$' | head -n 1)
     if [[ -n "$power" ]]; then
       #echo "Using $ENTITIES"
       entity="$power"
