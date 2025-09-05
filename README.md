@@ -125,7 +125,7 @@ Discovering lifetime_power and matching power sensors...
 Found data for power_meter_pvs6mxxxxxxxxp_power matched from power_meter_pvs6mxxxxxxxxp_lifetime_power
 Found data for inverter_e00122xxxxxxxxxx_power matched from inverter_e00122xxxxxxxxxx_lifetime_power
 
-Use this result in configuration.yaml for the timelapse_power_panels json_attributes
+Use the result below in configuration.yaml for the timelapse_power_panels json_attributes
 
 - power_meter_pvs6mxxxxxxxxp_power
 - inverter_e00122xxxxxxxxxx_lifetime_power
@@ -134,14 +134,22 @@ Use this result in configuration.yaml for the timelapse_power_panels json_attrib
 
 4. **Update `configuration.yaml`**
   - Review `configuration.yaml`.  Add to your own Home Assistant configuration.yaml (sensors, inputs, shell commands).
-  - Update any paths you may have changed in `query_panels.sh`.
+  - Update any paths you may have changed for `query_panels.sh`.  Dont forget the **shell_command** points to the location of `query_panels.sh`.
+  - Review `/config/power/entities.txt`, it should exist after running (`/config/scripts/query_panels.sh --discover`)
+  - Replace the `json_attributes` in  **command: "cat /config/power/panels.json"** with the result of `query_panels.sh --discover`.
+    ``` json_attributes:
+        - inverter_e00122xxxxxxxxxx_lifetime_power
+        - inverter_e00122xxxxxxxxxx_lifetime_power
+        - inverter_e00122xxxxxxxxxx_lifetime_power
+        - power_meter_pvs6mxxxxxxxxp_lifetime_power
+    ```
+    - Make sure all discovered entities are added.
   - Restart Home Assistant.
 
 5. **Verify Data Flow**
   - Ensure `query_panels.sh` is successfully pulling data from InfluxDB.
-  - Review /config/power/entities.txt, it should exist after running (`/config/scripts/query_panels.sh --discover`)
   - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e inverter_e00122xxxxxxxxxx_power -m max -m power`).
-  - Test a date and time with a specific entitiy (from the --discover output) to verify it produces a value response.
+  - Test a date and time with a specific entity (from the --discover output) to verify it produces a value response.
     - You will get empty values from dates that predate your InfluxDB setup.
 
 6. **Import Automations and Scripts**
