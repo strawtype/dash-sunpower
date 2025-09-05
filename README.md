@@ -2,20 +2,20 @@
 
 ![Dashboard Screenshot](screenshots/3.png)
 
-A Home Assistant dashboard designed for **SunPower** PV systems, built using several HACS components, InfluxDB for data storage and a simple bash script for querying.
-
+A Home Assistant dashboard designed for **SunPower** PV systems, built using several HACS components, InfluxDB for data storage and a simple bash script for querying.<br>
 The dashboard visualizes solar panel production over time, allows you to browse historical data, and provides a live mode for up-to-date readings.
 
 ---
 
 ## ✨ Features
 
-- 📊 **Visualize a day's solar panel production** in a custom dashboard
-- 📅 **Select a date** to view historical data
-- ⏱ **Select a time** using a 24-hour preview graph
-- 🔄 **Toggle Live View** for the most recent data
-- ⚡ **Switch between Power and Energy** views
-- 🖥 **Timelapse Mode** (play through hourly values)
+- **Display individual solar panel production** in a custom dashboard.
+- **Select a date** to view historical data.
+- **Select a time** using a 24-hour preview graph and slider.
+- **Toggle Live View** for the most recent data.
+- **Toggle Power** to display production in Watts at a specific time.
+- **Toggle Energy** to display production in kWh up-to a specific time.
+- **Timelapse** through a day's production.
 
 ---
 
@@ -23,7 +23,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 - A **Home Assistant** dashboard for **SunPower** systems using the [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) HACS integration.
 - A **bash script** (`query_panels.sh`) to query **InfluxDB** for power or energy values and save them for Home Assistant sensors.
-- An **example Lovelace dashboard** (`dashboard.yaml`) that uses the queried data.  You need to customize your own panel layout.
+- An **example dashboard** (`dashboard.yaml`) that uses the queried data.  You need to customize your own panel layout.
 
 ---
 
@@ -32,7 +32,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 - ❌ This code does **not** provide panel-level details you didn’t already have.
 - ❌ This will **not** work without a functional [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) integration.
 - ❌ It will **not** retroactively populate historical data — InfluxDB will collect data going forward if its a first time setup.
-- ❌ It will **not** automagically create your panel layout.  Use the example to customize your own placement.
+- ❌ It will **not** automatically create YOUR panel layout.  Use the example to customize your own placement.
 
 ---
 
@@ -168,20 +168,32 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 8. **Customize the Dashboard**
   - To accurately place the panels on the dashboard you must know their placement to begin with.  Consult your install documentation or the SunPower app to identify the location of each panel by serial number.
-  - The sensor id names have changed over time but they are usually "power_8" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
+  - The sensor id names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
   - In `dashboard.yaml` match each panel (card) to its relevant  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power** entity_id.  Use the results from `query_panels.sh --discover`
-  - Match the main production sensor to **power_key: **power** or **power_meter_pvs6mxxxxxxxxp_power**.
+  ```
+  - type: custom:button-card
+    template: solar_panel
+      variables:
+    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
+  ```
+  - Match the main production sensor **power_key: power_meter_pvs6mxxxxxxxxp_power**. The entity likely has a "p" at the end for "production".
+  ```
+  - type: custom:button-card
+    template: solar_panel
+    variables:
+      power_key: power      ####TOTAL PRODUCTION POWER METER "power_meter_pvs6mxxxxxxxxp_power"
+  ```
   - If you are using the legacy names, the device ID includes the serial number to help you identify each panel.
   - Remove or add any necessary cards to match your panel count.
 
 ---
 
-## 🧩 Notes & Customization
+## 🧩 Notes & Further Customization
 
-- The bash script is designed for **krbaker/hass-sunpower** entities — you may need to adjust entity names if using other integrations.
-- This setup queries **historical** values provided by InfluxDB.  Without stored data, graphs and selections will be empty.
-- `query_panels.sh` does not require write access.  You can use read-only permissions to the homeassistant database
-
+  - The bash script is designed for **krbaker/hass-sunpower** entities — you may need to adjust entity names if using other integrations.
+  - This setup queries **historical** values provided by InfluxDB.  Without stored data, graphs and selections will be empty.
+  - `query_panels.sh` only needs InfluxDB read access.
+  -
 ---
 
 ## 📄 License

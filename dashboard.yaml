@@ -371,13 +371,13 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power
+                    power_key: power      ####TOTAL PRODUCTION POWER METER "power_meter_pvs6mxxxxxxxxp_power"
                   name: TOTAL
                   show_name: true
                   show_icon: false
                   show_state: true
                   state_display: |
-                    [[[
+                    [[[                               //MAIN PRODUCTION POWER METER
                       const power = states['input_boolean.power_panels']?.state === 'on';
                       const latest = states['input_boolean.latest_panels'].state === 'on';
                       let units;
