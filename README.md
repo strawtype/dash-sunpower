@@ -85,10 +85,11 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ## ⚙️ Setup Instructions
 
-1. **Install Required HACS Integrations** (see Required Integrations above).
+1. **Install Required HACS Integrations**
+  - Install required Integrations listed above
 
-2. **Ensure InfluxDB is Running & Collecting Data**
----(This setup relies on InfluxDB v1.xx to store SunPower production data.  If already setup skip to: **Optional**.)
+2. **Ensure InfluxDB is Running & Collecting Data**<br>
+(This setup relies on InfluxDB v1.xx to store SunPower production data.  If already setup skip to: **Optional**.)
   - Install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository).  If setting up InfluxDB for the first time, historical data starts from now onward.
   - Create at least 1 new user with **read/write** access to the "homeassistant" database. (e.g., `homeassistant`).
   - See the included **configuration.yaml** for a sample **INFLUXBD** configuration. Add to it your own configuration.yaml
