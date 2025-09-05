@@ -102,10 +102,33 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 3. **Set up `query_panels.sh`**
   - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh`).
-  - Execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
-  - Edit the InfluxDB connection details. (e.g., `homeassistant` or `powermonitor`)
+  - Edit `query_panels.sh` and replace the InfluxDB connection information.
+  ```
+  INFLUXDB_HOST="localhost:8086"
+       USERNAME="powermonitor"
+       PASSWORD="password"
+       DATABASE="homeassistant"
+  ```
   - Check the **${DATA_DIR}** path works for your Home Assistant install. The included `configuration.yaml` entries will need an update if changed.
+  ```
+       DATA_DIR="/config/power"             ### files written by this script
+       ENTITIES="${DATA_DIR}/entities.txt"
+      GRAPH_OUT="${DATA_DIR}/graph.json"
+     PANELS_OUT="${DATA_DIR}/panels.json"
+  ```
+  - Execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
   - Run (`query_panels.sh --discover`) to attempt sensor discovery. If successful, it should print the sensor entities needed in configuration.yaml in next steps.
+  ```
+   /config/scripts/query_panels.sh --discover
+
+Discovering lifetime_power and matching power sensors...
+Found data for power_meter_pvs6mxxxxxxxxp_power matched from power_meter_pvs6mxxxxxxxxp_lifetime_power
+Found data for inverter_e00122xxxxxxxxxx_power matched from inverter_e00122xxxxxxxxxx_lifetime_power
+...
+- power_meter_pvs6mxxxxxxxxp_power
+- inverter_e00122xxxxxxxxxx_lifetime_power
+...
+  ```
 
 4. **Update `configuration.yaml`**
   - Review `configuration.yaml`.  Add to your own Home Assistant configuration.yaml (sensors, inputs, shell commands).
