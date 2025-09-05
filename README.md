@@ -122,12 +122,14 @@ The dashboard visualizes solar panel production over time, allows you to browse 
    /config/scripts/query_panels.sh --discover
 
 Discovering lifetime_power and matching power sensors...
+
 Found data for power_meter_pvs6mxxxxxxxxp_power matched from power_meter_pvs6mxxxxxxxxp_lifetime_power
 Found data for inverter_e00122xxxxxxxxxx_power matched from inverter_e00122xxxxxxxxxx_lifetime_power
 
-Use the result below in configuration.yaml for the timelapse_power_panels json_attributes
+Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 - power_meter_pvs6mxxxxxxxxp_power
+- inverter_e00122xxxxxxxxxx_lifetime_power
 - inverter_e00122xxxxxxxxxx_lifetime_power
 ...
   ```
