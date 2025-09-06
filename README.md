@@ -102,7 +102,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
   - **Optional:** create a new user with **read-only** access to the homeassistant database for the query_panels.sh script.  (e.g., `powermonitor`)
 
 3. **Set up `query_panels.sh`**
-  - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh`).
+  - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh` or `/home/pi/.homeassistant/scripts/query_panels.sh`).
   - Edit `query_panels.sh` and replace the InfluxDB connection information.
   ```
   INFLUXDB_HOST="localhost:8086"
