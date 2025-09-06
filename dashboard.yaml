@@ -385,7 +385,6 @@ views:
                       } else {
                          units = 'kWh';
                       }
-
                       let val;
                       if (power && latest) {
                         val = parseFloat(states['sensor.power']?.state ?? 0);
@@ -393,6 +392,9 @@ views:
                         const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                         const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
                         const start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
+                        if (start === 0) {      //missing values in early mornings
+                          start = lifetime;
+                        }
                         val = lifetime - start;
                       } else {
                         val = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
@@ -428,6 +430,9 @@ views:
                               const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                               const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
                               const start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
+                              if (start === 0) {      //missing values in early mornings
+                                start = lifetime;
+                              }
                               val = lifetime - start;
                             } else {
                               val = parseFloat(entity.attributes?.[variables.power_key] ?? 0);

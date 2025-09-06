@@ -101,8 +101,9 @@ The dashboard visualizes solar panel production over time, allows you to browse 
   - Restart Home Assistant
   - **Optional:** create a new user with **read-only** access to the homeassistant database for the query_panels.sh script.  (e.g., `powermonitor`)
 
-3. **Set up `query_panels.sh`**
-  - Place the script in your Home Assistant config folder (e.g., `/config/scripts/query_panels.sh` or `/home/pi/.homeassistant/scripts/query_panels.sh`).
+3. **Set up `query_panels.sh`**<br>
+(if you change paths make sure dashboard.yaml sensors and command match)
+  - Create a `scripts` directory, in your Home Assistant config path.  Copy `query_panels.sh`  (e.g., `/config/scripts/query_panels.sh` or `/home/pi/.homeassistant/scripts/query_panels.sh`).
   - Edit `query_panels.sh` and replace the InfluxDB connection information.
   ```
   INFLUXDB_HOST="localhost:8086"
@@ -149,24 +150,18 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
     - Make sure all discovered entities are added.
   - Restart Home Assistant.
 
-5. **Verify Data Flow**
-  - Ensure `query_panels.sh` is successfully pulling data from InfluxDB.
-  - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e inverter_e00122xxxxxxxxxx_power -m max -m power`).
-  - Test a date and time with a specific entity (from the --discover output) to verify it produces a value response.
-    - You will get empty values from dates that predate your InfluxDB setup.
-
-6. **Import Automations and Scripts**
+5. **Import Automations and Scripts**
   - Add `automation_refresh_panels_onselect.yaml` to your automations
   - Add `automation_refresh_graph_onlive.yaml` to your automations
   - Add `script_panels_timelapse.yaml` to your scripts
 
-7. **Load the Example Dashboard**
+6. **Load the Example Dashboard**
   - Copy `dashboard.yaml` to create a new dashboard.
   - Add it as a new dashboard in Home Assistant’s UI.
   - Review the notes in dashboard.yaml for customization (colors, thresholds, intervals)
   - Each Solar Panel is an individual card that needs to be associated with its corresponding sensor_id in the next step.
 
-8. **Customize the Dashboard**
+7. **Customize the Dashboard**
   - To accurately place the panels on the dashboard you must know their placement to begin with.  Consult your install documentation or the SunPower app to identify the location of each panel by serial number.
   - The sensor id names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
   - In `dashboard.yaml` match each panel (card) to its relevant  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power** entity_id.  Use the results from `query_panels.sh --discover`
@@ -195,6 +190,37 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - `query_panels.sh` only needs InfluxDB read access.
   -
 ---
+
+## 🧩 Troubleshooting
+
+**"Query failed. Is InfluxDB running?"**
+  - Check the InfluxDB service is started on HomeAssistant
+  - Make sure the username and password are correct in query_panels.sh
+  - Check the user has read permissions to the homeassistant database.
+
+**query_panels.sh --discover is empty**
+  - In the absence of "Query failed", this means the entities could not be found in InfluxDB
+  - Check the InfluxDB user (in `query_panels.sh`), has read access to the `homeassistant` the database
+  - Check the InfluxDB `configuration.yaml` details, and make sure homeassistant restarts if changed.
+  - Query the database using with `SHOW TAG VALUES FROM "kWh" WITH KEY = "entity_id"`
+    - This should all your energy entities. If missing, check [krbaker/hass-sunpower] and InfluxDB settings (the database is not collecting).
+    - SunPower entities exist, but `--discover` didn't find them?
+      -  Try adding them manually to `/config/power/entities.txt`
+      ```
+- power
+- power_10
+- power_11
+- power_12
+- power_13
+- power_14
+- power_15
+      ```
+**Zeros, Gray Panels**
+  - Verify `query_panels.sh` can pull data from InfluxDB.
+  - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e inverter_e00122xxxxxxxxxx_power -m max -m power`).
+  - Test any entity found during `--discover` with a time and date greater than your InfluxDB setup.
+    - You will get empty values from dates that predate your InfluxDB setup.  Zeros are expected at night.
+
 
 ## 📄 License
 
