@@ -188,7 +188,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - The bash script is designed for **krbaker/hass-sunpower** entities — you may need to adjust entity names if using other integrations.
   - This setup queries **historical** values provided by InfluxDB.  Without stored data, graphs and selections will be empty.
   - `query_panels.sh` only needs InfluxDB read access.
-  -
+
 ---
 
 ## 🛠️ Troubleshooting
