@@ -29,9 +29,9 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ## 🚫 What this is not
 
-- ❌ This code does **not** provide panel-level details you didn’t already have.
+- ❌ This setup does **not** provide additional panel-level details.  It uses data from your SunPower PVS
 - ❌ This will **not** work without a functional [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) integration.
-- ❌ It will **not** retroactively populate historical data — InfluxDB will collect data going forward if its a first time setup.
+- ❌ It will **not** retroactively populate historical data — InfluxDB will collect data going forward if it is a first time setup.
 - ❌ It will **not** automatically create YOUR panel layout.  Use the example to customize your own placement.
 
 ---
@@ -66,7 +66,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 | `automation_refresh_panels_onselect.yaml` | Automation to refresh panels when selections change   |
 | `automation_refresh_graph_onlive.yaml`     | Automation to refresh graphs/panels in live mode (default: 5 min) |
 | `script_panels_timelapse.yaml` | Timelapse playback script   |
-| `panel_layout_trans.png` | transparent background image expected in /config/www/images/
+| `panel_layout_trans.png` | Transparent background image expected in /config/www/images/
 
 ---
 
@@ -92,7 +92,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 (This setup relies on InfluxDB v1.xx to store SunPower production data.  If already setup skip to: **Optional**.)
   - Install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository).  If setting up InfluxDB for the first time, historical data starts from now onward.
   - Create at least 1 new user with **read/write** access to the "homeassistant" database. (e.g., `homeassistant`).
-  - See the included **configuration.yaml** for a sample **INFLUXBD** configuration. Add to it your own configuration.yaml
+  - See the included **configuration.yaml** for a sample **INFLUXDB** configuration. Add to it your own configuration.yaml
      - Save the new username and password in secrets.yaml as
      ```
      influxdb_user: homeassistant
@@ -102,7 +102,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
   - **Optional:** create a new user with **read-only** access to the homeassistant database for the query_panels.sh script.  (e.g., `powermonitor`)
 
 3. **Set up `query_panels.sh`**<br>
-(if you change paths make sure dashboard.yaml sensors and command match)
+(If you change paths make sure dashboard.yaml sensors and command match)
   - Create a `scripts` directory, in your Home Assistant config path.  Copy `query_panels.sh`  (e.g., `/config/scripts/query_panels.sh` or `/home/pi/.homeassistant/scripts/query_panels.sh`).
   - Edit `query_panels.sh` and replace the InfluxDB connection information.
   ```
@@ -118,7 +118,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
       GRAPH_OUT="${DATA_DIR}/graph.json"
      PANELS_OUT="${DATA_DIR}/panels.json"
   ```
-  - Execution rights:   (e.g., `chmod +x /config/scripts/query_panels.sh`).
+  - Execution rights (e.g., `chmod +x /config/scripts/query_panels.sh`).
   - Run (`query_panels.sh --discover`) to attempt sensor discovery. If successful, it should print the sensor entities needed in configuration.yaml in next steps.
   ```
    /config/scripts/query_panels.sh --discover
@@ -137,10 +137,10 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   ```
 
 4. **Update `configuration.yaml`**
-  - Review `configuration.yaml`.  Add to your own Home Assistant configuration.yaml (sensors, inputs, shell commands).
+  - Review the included `configuration.yaml`.  Add it to your own `configuration.yaml` (sensors, inputs, shell commands).
   - Update any paths you may have changed for `query_panels.sh`.  Dont forget the **shell_command** points to the location of `query_panels.sh`.
   - Review `/config/power/entities.txt`, it should exist after running (`/config/scripts/query_panels.sh --discover`)
-  - Replace the `json_attributes` in  **command: "cat /config/power/panels.json"** with the result of `query_panels.sh --discover`.
+  - Replace the `json_attributes` in `configuration.yaml`, for the command line sensor **timelapse_power_panels**, with the result of `query_panels.sh --discover`.
     ``` json_attributes:
         - inverter_e00122xxxxxxxxxx_lifetime_power
         - inverter_e00122xxxxxxxxxx_lifetime_power
@@ -163,7 +163,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 7. **Customize the Dashboard**
   - To accurately place the panels on the dashboard you must know their placement to begin with.  Consult your install documentation or the SunPower app to identify the location of each panel by serial number.
-  - The sensor id names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
+  - The sensor ID names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
   - In `dashboard.yaml` match each panel (card) to its corresponding  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power** entity_id.  Use the results from `query_panels.sh --discover`
   ```
   - type: custom:button-card
@@ -186,7 +186,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 ## 🧩 Notes & Further Customization
 
   - The bash script is designed for **krbaker/hass-sunpower** entities — you may need to adjust entity names if using other integrations.
-  - This setup queries **historical** values provided by InfluxDB.  Without stored data, graphs and selections will be empty.
+  - This setup queries **historical** values provided by InfluxDB. Without stored data, graphs and selections will be empty.
   - `query_panels.sh` only needs InfluxDB read access.
 
 ---
@@ -195,12 +195,12 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 **"Query failed. Is InfluxDB running?"**
   - Check the InfluxDB service is started on HomeAssistant
-  - Make sure the username and password are correct in query_panels.sh
+  - Make sure the host, username and password are correct in query_panels.sh
   - Check the user has read permissions to the homeassistant database.
 
 **query_panels.sh --discover is empty**
   - In the absence of "Query failed", this means the entities could not be found in InfluxDB
-  - Check the InfluxDB user (in `query_panels.sh`), has read access to the `homeassistant` the database
+  - Check the InfluxDB user (in `query_panels.sh`), has read access to the `homeassistant` database
   - Check the InfluxDB `configuration.yaml` details, and make sure homeassistant restarts if changed.
   - Query the database using with `SHOW TAG VALUES FROM "kWh" WITH KEY = "entity_id"`
     - This should all your energy entities. If missing, check [krbaker/hass-sunpower] and InfluxDB settings (the database is not collecting).

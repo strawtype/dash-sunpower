@@ -39,12 +39,12 @@ button_card_templates:
     styles:
       card:
         - border-radius: .1vw
-        - height: 10vw
-        - width: 5vw
+        - height: 10vw                                             ## TEMPLATE PANEL HEIGHT
+        - width: 5vw                                               ## TEMPLATE PANEL WIDTH
         - margin: 0.2vw
         - padding: 0vw
         - box-shadow: none !important
-        - font-size: clamp(10px, 2vw, 30px)
+        - font-size: clamp(10px, 2vw, 30px)                        ## TEMPLATE PANEL FONT
         - font-weight: bold
         - color: black
         - background-color: |
@@ -129,7 +129,7 @@ views:
                     left: 7%
                     top: 30%
                   styles:
-                    card:                    ### HORIZONTAL PANELS HAVE THESE 3 EXTRA LINES, REMOVE FOR VERTICAL (its in the template)
+                    card:                    ### HORIZONTAL PANELS HAVE 3 EXTRA LINES TO OVERRIDE THE TEMPLATE, REMOVE FOR VERTICAL
                       - height: 5vw
                       - width: 10vw
                 - type: custom:button-card
