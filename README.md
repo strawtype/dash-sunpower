@@ -86,7 +86,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 ## ⚙️ Setup Instructions
 
 1. **Install Required HACS Integrations**
-  - Install required Integrations listed above
+  - see above
 
 2. **Ensure InfluxDB is Running & Collecting Data**<br>
 (This setup relies on InfluxDB v1.xx to store SunPower production data.  If already setup skip to: **Optional**.)
