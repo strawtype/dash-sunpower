@@ -61,7 +61,7 @@ button_card_templates:
                 const produced = parseFloat(states[`sensor.${lifetime_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);  //lifetime sensor - attribute
                 val = Number.isFinite(produced) ? produced : 0;
               }
-              if (power) {                                                        //gradiant for POWER mode, adjust to your max panel output in watts
+              if (power) {                                                        //gradiant for POWER mode, adjust the steps depending on max panel output in watts.
                 const watts = Number.isFinite(val) ? Math.round(val * 1000) : 0;
                 if (watts === 0)  return 'gray';
                 if (watts <= 35)  return '#FFF9C4';
@@ -119,24 +119,23 @@ views:
               }
             card:
               type: picture-elements
-              image: /local/images/panel_layout_trans.png
+              image: /local/images/panel_layout_trans.png   ### BACKGROUND IMAGE (behind the panels)
               elements:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: >-
-                      power_22
-                  style:
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power      ### EACH PANEL MUST BE ASSOCIATED TO THE CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML timelapse_power_panels
+                  style:                     ### ADJUST PER PANEL, TO SET LOCATION
                     left: 7%
                     top: 30%
                   styles:
-                    card:
+                    card:                    ### HORIZONTAL PANELS HAVE THESE 3 EXTRA LINES, REMOVE FOR VERTICAL (its in the template)
                       - height: 5vw
                       - width: 10vw
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_29
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power      ### EACH PANEL MUST BE ASSOCIATED TO THE CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML
                   style:
                     left: 19%
                     top: 30%
@@ -147,7 +146,7 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_4
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power        ### EACH PANEL MUST BE ASSOCIATED TO THE CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML
                   style:
                     left: 37%
                     top: 30%
@@ -158,7 +157,7 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_25
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 28%
                     top: 35%
@@ -169,147 +168,147 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_28
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 49%
                     top: 54%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_31
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 43%
                     top: 72%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_24
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 49%
                     top: 72%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_5
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 37%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_32
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 43%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_21
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 49%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_30
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 55%
                     top: 54%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_26
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 55%
                     top: 72%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_6
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 55%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_19
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 61%
                     top: 54%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_3
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 61%
                     top: 72%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_10
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 61%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_27
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 67%
                     top: 54%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_16
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 67%
                     top: 72%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_15
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 67%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_13
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 19%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_8
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 25%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_17
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 31%
                     top: 90%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_14
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 61.5%
                     top: 16.5%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_12
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 67.5%
                     top: 16.5%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_11
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 58.5%
                     top: 30%
@@ -320,7 +319,7 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_23
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 70.5%
                     top: 30%
@@ -331,14 +330,14 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_7
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 84%
                     top: 17%
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_18
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 93%
                     top: 8%
@@ -349,7 +348,7 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_20
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 93%
                     top: 17%
@@ -360,7 +359,7 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_9
+                    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
                     left: 93%
                     top: 26%
@@ -371,13 +370,13 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power      ####TOTAL PRODUCTION POWER METER "power_meter_pvs6mxxxxxxxxp_power"
+                    power_key: power_meter_pvs6mxxxxxxxxp_lifetime_power      ####TOTAL PRODUCTION POWER METER "power_meter_pvs6mxxxxxxxxp_power"
                   name: TOTAL
                   show_name: true
                   show_icon: false
                   show_state: true
                   state_display: |
-                    [[[                               //MAIN PRODUCTION POWER METER
+                    [[[                               //MAIN (TOTAL) PRODUCTION POWER METER DISPLAY
                       const power = states['input_boolean.power_panels']?.state === 'on';
                       const latest = states['input_boolean.latest_panels'].state === 'on';
                       let units;
@@ -419,7 +418,7 @@ views:
                       - background-color: none
                       - border-width: 0px
                       - color: |
-                          [[[
+                          [[[                   //MAIN (TOTAL) PRODUCTION POWER METER COLORS
                             const power = states['input_boolean.power_panels']?.state === 'on';
                             const latest = states['input_boolean.latest_panels'].state === 'on';
                             let val;
@@ -433,7 +432,7 @@ views:
                             } else {
                               val = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
                             }
-                            if (power) {
+                            if (power) {   //watts
                               if (val <= 0.1)  return 'gray';
                               if (val <= 1.1)  return '#FFF9C4';
                               if (val <= 2.2)  return '#FFF59D';
@@ -447,7 +446,7 @@ views:
                               if (val >  9.9)   return'#FF6F00';
                               return '#FF6F00';
                             }
-                            else {
+                            else {        //kWh
                               if (val < .05 ) return 'gray';
                               if (val <= 8)   return '#E1F5FE';
                               if (val <= 16)  return '#B3E5FC';
@@ -519,7 +518,7 @@ views:
                         type: area
                         name: Power
                         stroke_width: 0
-                        color_threshold:
+                        color_threshold:    ####### GRAPH COLORS POWER, ADJUST FOR YOUR MAX TOTAL OUTPUT (WATTS)
                           - value: 0
                             color: gray
                           - value: 100
@@ -603,7 +602,7 @@ views:
                         type: area
                         name: Power
                         stroke_width: 0
-                        color_threshold:
+                        color_threshold:    ####### GRAPH COLORS ENERGY, ADJUST FOR YOUR MAX TOTAL DAILY PRODUCTION (KWH)
                           - value: 0
                             color: gray
                           - value: 9
