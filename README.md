@@ -191,7 +191,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   -
 ---
 
-## 🧩 Troubleshooting
+## 🛠️ Troubleshooting
 
 **"Query failed. Is InfluxDB running?"**
   - Check the InfluxDB service is started on HomeAssistant
@@ -207,14 +207,15 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
     - SunPower entities exist, but `--discover` didn't find them?
       -  Try adding them manually to `/config/power/entities.txt`
       ```
-- power
-- power_10
-- power_11
-- power_12
-- power_13
-- power_14
-- power_15
+      - power
+      - power_10
+      - power_11
+      - power_12
+      - power_13
+      - power_14
+      - power_15
       ```
+---
 **Zeros, Gray Panels**
   - Verify `query_panels.sh` can pull data from InfluxDB.
   - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e inverter_e00122xxxxxxxxxx_power -m max -m power`).
