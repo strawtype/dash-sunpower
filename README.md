@@ -215,13 +215,14 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
       - power_14
       - power_15
       ```
----
+
 **Zeros, Gray Panels**
   - Verify `query_panels.sh` can pull data from InfluxDB.
   - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e inverter_e00122xxxxxxxxxx_power -m max -m power`).
   - Test any entity found during `--discover` with a time and date greater than your InfluxDB setup.
     - You will get empty values from dates that predate your InfluxDB setup.  Zeros are expected at night.
 
+---
 
 ## 📄 License
 
