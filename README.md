@@ -194,6 +194,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   ```
   - If you are using the legacy names, the device ID includes the serial number to help you identify each panel.
   - Remove or add any necessary cards to match your panel count.
+  - Some buttons have white text, which may hard to read in "light" themes.
 
 ---
 
@@ -245,6 +246,8 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Check each card has the correct association to a power sensor
   - Check `configuration.yaml` and make sure **timelapse_power_panels** has the correct **json_attributes**.  This should be the output of `entities.txt` after `--discover`.
 
+**Missing Labels**
+  - The example dashboard is using a "dark" theme. Some text labels are set to "white"
 ---
 
 ## 📄 License
