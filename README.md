@@ -164,7 +164,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 7. **Customize the Dashboard**
   - To accurately place the panels on the dashboard you must know their placement to begin with.  Consult your install documentation or the SunPower app to identify the location of each panel by serial number.
   - The sensor id names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
-  - In `dashboard.yaml` match each panel (card) to its relevant  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power** entity_id.  Use the results from `query_panels.sh --discover`
+  - In `dashboard.yaml` match each panel (card) to its corresponding  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power** entity_id.  Use the results from `query_panels.sh --discover`
   ```
   - type: custom:button-card
     template: solar_panel
@@ -221,6 +221,15 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Run `/config/scripts/query_panels.sh`for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e inverter_e00122xxxxxxxxxx_power -m max -m power`).
   - Test any entity found during `--discover` with a time and date greater than your InfluxDB setup.
     - You will get empty values from dates that predate your InfluxDB setup.  Zeros are expected at night.
+    - Check each panel (card) in the `dashboard.yaml` has its corresponding  **power_key:** with the correct sensor
+
+**TOTAL doesn't work**
+  - This card is in the `dashboard.yaml` labeled "PRODUCTION POWER METER"
+  - Check the card has its corresponding  **power_key:** with the correct sensor, usually has a trailing **"p"** in the device and sensor ids.  (e.g., `power_meter_pvs6mxxxxxxxxp_power`)
+
+**Broken UI**
+  - Check each card has the correct association to a power sensor
+  - Check `configuration.yaml` and make sure **timelapse_power_panels** has the correct **json_attributes**.  This should be the output of `entities.txt` after `--discover`.
 
 ---
 
