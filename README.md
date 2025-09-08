@@ -257,7 +257,3 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 **Missing Labels**
   - The example dashboard is using a "dark" theme. Some text labels are set to "white"
 ---
-
-## 📄 License
-
-MIT License — free to use, modify, and share.
