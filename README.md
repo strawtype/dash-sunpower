@@ -133,7 +133,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
        PASSWORD="password"
        DATABASE="homeassistant"
   ```
-  - Check the **${DATA_DIR}** path works for your Home Assistant install. The included `configuration.yaml` entries will need an update if changed.
+  - Check the **${DATA_DIR}** path, created by the script, works for your Home Assistant install. The included `configuration.yaml` entries will need an update if changed.
   ```
        DATA_DIR="/config/power"             ### files written by this script
        ENTITIES="${DATA_DIR}/entities.txt"
@@ -141,7 +141,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
      PANELS_OUT="${DATA_DIR}/panels.json"
   ```
   - Execution rights (e.g., `chmod +x /config/scripts/query_panels.sh`).
-  - Run (`query_panels.sh --discover`) to attempt sensor discovery. If successful, it should print the sensor entities needed in configuration.yaml in next steps.
+  - Run (`query_panels.sh --discover`) to attempt sensor discovery. If successful, it should print the sensor entities needed in configuration.yaml and store them (e.g., `/config/power/entities.txt`).
   ```
    /config/scripts/query_panels.sh --discover
 
@@ -159,12 +159,11 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   ```
 
 4. **Update `configuration.yaml`**
-  - Review the included `configuration.yaml`.  Add it to your own `configuration.yaml` (sensors, inputs, shell commands).
-  - Update any paths you may have changed for `query_panels.sh`.  Don't forget the **shell_command** points to the location of `query_panels.sh`.
+  - Review the included `configuration.yaml` and add it to your own `configuration.yaml` (sensors, inputs, shell commands).
+  - Update any paths you may have changed for `query_panels.sh`.  The **shell_command** points to the location of `query_panels.sh`.
   - Review `/config/power/entities.txt`, it should exist after running (`/config/scripts/query_panels.sh --discover`)
   - Replace the `json_attributes` in `configuration.yaml`, for the command line sensor **timelapse_power_panels**, with the result of `query_panels.sh --discover`.
     ``` json_attributes:
-        - inverter_e00122xxxxxxxxxx_lifetime_power
         - inverter_e00122xxxxxxxxxx_lifetime_power
         - inverter_e00122xxxxxxxxxx_lifetime_power
         - power_meter_pvs6mxxxxxxxxp_lifetime_power
@@ -193,12 +192,12 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
       variables:
     power_key: inverter_e00122xxxxxxxxxx_lifetime_power
   ```
-  - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power`. The entity likely has a "p" at the end for "production".
+  - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power`. The entity or device has a trailing "p" for "production".
   ```
   - type: custom:button-card
     template: solar_panel
     variables:
-      power_key: power      ####TOTAL PRODUCTION POWER METER "power_meter_pvs6mxxxxxxxxp_power"
+      power_key: power_meter_pvs6mxxxxxxxxp_power      ####TOTAL PRODUCTION POWER METER
   ```
   - If you are using the legacy names, the device ID includes the serial number to help you identify each panel.
   - Remove or add any necessary cards to match your panel count.

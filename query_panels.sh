@@ -81,6 +81,7 @@ discover() {
   cat  ${DATA_DIR}/entities.txt
   echo ""
   echo "Use above in configuration.yaml for the timelapse_power_panels json_attributes"
+  echo "Saved at $ENTITIES"
 }
 
 
