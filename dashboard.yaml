@@ -148,7 +148,7 @@ views:
                   variables:
                     power_key: inverter_e00122xxxxxxxxxx_lifetime_power        ### EACH PANEL MUST BE ASSOCIATED TO THE CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML
                   style:
-                    left: 37%
+                    left: 43%
                     top: 30%
                   styles:
                     card:
@@ -159,12 +159,12 @@ views:
                   variables:
                     power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
-                    left: 28%
-                    top: 35%
+                    left: 31%
+                    top: 30%
                   styles:
                     card:
-                      - height: 10vw
-                      - width: 5vw
+                      - height: 5vw
+                      - width: 10vw
                 - type: custom:button-card
                   template: solar_panel
                   variables:
@@ -296,15 +296,23 @@ views:
                   variables:
                     power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
-                    left: 61.5%
-                    top: 16.5%
+                    left: 58.5%
+                    top: 20.5%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
                 - type: custom:button-card
                   template: solar_panel
                   variables:
                     power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
-                    left: 67.5%
-                    top: 16.5%
+                    left: 70.5%
+                    top: 20.5%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
                 - type: custom:button-card
                   template: solar_panel
                   variables:
@@ -332,8 +340,12 @@ views:
                   variables:
                     power_key: inverter_e00122xxxxxxxxxx_lifetime_power
                   style:
-                    left: 84%
-                    top: 17%
+                    left: 93%
+                    top: 35%
+                  styles:
+                    card:
+                      - height: 5vw
+                      - width: 10vw
                 - type: custom:button-card
                   template: solar_panel
                   variables:
@@ -370,7 +382,7 @@ views:
                 - type: custom:button-card
                   template: solar_panel
                   variables:
-                    power_key: power_meter_pvs6mxxxxxxxxp_lifetime_power      ####TOTAL PRODUCTION POWER METER "power_meter_pvs6mxxxxxxxxp_power"
+                    power_key: power_meter_pvs6mxxxxxxxxp_lifetime_power      ####TOTAL PRODUCTION POWER METER
                   name: TOTAL
                   show_name: true
                   show_icon: false

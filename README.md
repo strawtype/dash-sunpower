@@ -87,24 +87,25 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ## 🖼 Screenshots
 
-### Timelapse View
+### Timelapse
 <div align="center">
   <img src="screenshots/1.png" alt="Timelapse View" width="600">
 </div>
 
-### Energy View
+### Historical Energy
 <div align="center">
   <img src="screenshots/2.png" alt="Energy View" width="600">
 </div>
 
-### Power View
+### Live Power
 <div align="center">
   <img src="screenshots/3.png" alt="Power View" width="600">
 </div>
 
 ---
 
-## ⚙️ Setup Instructions
+## ⚙️ Setup Instructions <br>
+**Before you start, consider doing this during the day. It is easier to troubleshoot when the inverters are online**
 
 1. **Install Required HACS Integrations**
   - [Required Integrations](#-required-integrations)
@@ -160,7 +161,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 4. **Update `configuration.yaml`**
   - Review the included `configuration.yaml` and add it to your own `configuration.yaml` (sensors, inputs, shell commands).
   - Update any paths you may have changed for `query_panels.sh`.  The **shell_command** points to the location of `query_panels.sh`.
-  - Review `/config/power/entities.txt`, it should exist after running (`/config/scripts/query_panels.sh --discover`)
+  - Review `/config/power/entities.txt`. It should contain the sunpower entities after running (`/config/scripts/query_panels.sh --discover`)
   - Replace the `json_attributes` in `configuration.yaml`, for the command line sensor **timelapse_power_panels**, with the result of `query_panels.sh --discover`.
     ``` json_attributes:
         - inverter_e00122xxxxxxxxxx_lifetime_power
@@ -177,7 +178,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 6. **Load the Example Dashboard**
   - Copy `dashboard.yaml` to create a new dashboard.
   - Add it as a new dashboard in Home Assistant’s UI (paste it).
-  - Review the notes in `dashboard.yaml` for customization (colors, thresholds, intervals)
+  - Review the notes in `dashboard.yaml` for customization (colors, thresholds, intervals).
   - Each solar panel is an individual card that needs to be associated with its corresponding sensor_id in the next step.
 
 7. **Customize the Dashboard**
@@ -239,7 +240,8 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 **Zeros, Gray Panels**
   - Verify `query_panels.sh` can pull data from InfluxDB.
   - Run `/config/scripts/query_panels.sh` for usage (e.g., `/config/scripts/query_panels.sh -d 2025-07-31 -h 14 -e inverter_e00122xxxxxxxxxx_power -m max -m power`).
-  - Test any entity found during `--discover` with a time and date greater than your InfluxDB setup.
+  - Test any entity found during `query_panels.sh --discover`, also stored at `/config/power/entities.txt`
+    - Use a time and date after your inital InfluxDB and [krbaker/hass-sunpower] setup.
     - You will get empty values from dates that predate your InfluxDB setup.  Zeros are expected at night.
     - Check each panel (card) in the `dashboard.yaml` has its corresponding  **power_key:** with the correct sensor
 
@@ -252,5 +254,5 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Check `configuration.yaml` and make sure **timelapse_power_panels** has the correct **json_attributes**.  This should be the output of `entities.txt` after `--discover`.
 
 **Missing Labels**
-  - The example dashboard is using a "dark" theme. Some text labels are set to "white"
+  - The example dashboard is expecting a "dark" theme. Some text labels are set to "white"
 ---
