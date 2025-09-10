@@ -80,7 +80,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 | `configuration.yaml`                | Required changes for Home Assistant's configuration.yaml  |
 | `dashboard.yaml`                    | Example Home Assistant dashboard  |
 | `automation_refresh_panels.yaml`    | Automation to refresh panels when selections change   |
-| `automation_timelapse_panels.yaml`  | Automation to refresh graphs/panels in live mode (default: 5 min) |
+| `automation_timelapse_panels.yaml`  | Automation to timelapse through a day |
 | `panel_layout_trans.png`            | Transparent background image expected in /config/www/images/
 
 ---
