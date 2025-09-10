@@ -183,14 +183,14 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 7. **Customize the Dashboard**
   - To accurately place the panels on the dashboard you must already know their layout or physical placement.  Consult your install documentation or the SunPower app to identify the location of each panel by serial number.
   - The sensor ID names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
-  - In `dashboard.yaml` match each panel (card) to its corresponding  **power_key: power_8**  or  **power_key: inverter_e00122xxxxxxxxxx_power** entity_id.  Use the results from `query_panels.sh --discover`
+  - In `dashboard.yaml` match each panel (card) to its corresponding entity id `power_key: inverter_e00122xxxxxxxxxx_power`.  Use the results from `query_panels.sh --discover`
   ```
   - type: custom:button-card
     template: solar_panel
       variables:
     power_key: inverter_e00122xxxxxxxxxx_lifetime_power
   ```
-  - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power`. The entity or device has a trailing "p" for "production".
+  - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power` to the TOTAL PRDUCTION card. The entity or device has a trailing "p" after the serial number.
   ```
   - type: custom:button-card
     template: solar_panel
