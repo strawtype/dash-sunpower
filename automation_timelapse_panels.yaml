@@ -17,7 +17,7 @@ actions:
         state: "off"
     then:
       - data:
-          value: 4
+          value: 4      ### FFORWARD TO 4AM
         target:
           entity_id: input_number.timelapse_hour_slider
         action: input_number.set_value
@@ -25,9 +25,8 @@ actions:
           while:
             - condition: template
               value_template: >
-                {{ (states('input_number.timelapse_hour_slider') | int(0)) < 21
-                and
-                   is_state('input_boolean.timelapse_panels', 'on') }}
+                {{ (states('input_number.timelapse_hour_slider') | int(0)) < 24
+                and is_state('input_boolean.timelapse_panels', 'on') }}
           sequence:
             - variables:
                 current: "{{ states('input_number.timelapse_hour_slider') | int(0) }}"

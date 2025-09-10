@@ -71,7 +71,7 @@ discover() {
     result=$(queryflux)
 
     if echo "$result" | jq -e '.results[0].series[0].values and (.results[0].series[0].values | length > 0)' > /dev/null 2>&1; then
-      echo "Found data for $power_entity matched from $lifetime_entity"
+      echo "Found $power_entity matched from $lifetime_entity"
       echo "- $power_entity" >> "${DATA_DIR}/entities.txt"
     fi
   done

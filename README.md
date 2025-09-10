@@ -107,7 +107,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 ## ⚙️ Setup Instructions
 
 1. **Install Required HACS Integrations**
-  - See above
+  - [Required Integrations](#-required-integrations)
 
 2. **Setup InfluxDB**<br>
 (This setup relies on InfluxDB v1.xx to store SunPower production data.  If already setup, skip to: **Optional**.)
@@ -140,7 +140,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
      PANELS_OUT="${DATA_DIR}/panels.json"
   ```
   - Execution rights (e.g., `chmod +x /config/scripts/query_panels.sh`).
-  - Run (`query_panels.sh --discover`) to attempt sensor discovery. If successful, it should print the sensor entities needed in configuration.yaml and store them (e.g., `/config/power/entities.txt`).
+  - Run (`query_panels.sh --discover`) to attempt sensor discovery. If successful, it will print the sensor entities needed in configuration.yaml and store them. (e.g., `/config/power/entities.txt`)
   ```
    /config/scripts/query_panels.sh --discover
 
