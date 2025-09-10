@@ -40,7 +40,7 @@ queryflux () {
     --data-urlencode "u=${USERNAME}" \
     --data-urlencode "p=${PASSWORD}" \
     --data-urlencode "q=${QUERY}"); then
-     echo "$query_result"
+    echo "$query_result"
   else
     echo "Query failed. Is InfluxDB running?"
   fi
@@ -173,6 +173,8 @@ while getopts ":d:h:e:p:m:" opt; do
     \?) echo "Invalid option: -$OPTARG" >&2 ; exit 1 ;;
   esac
 done
+
+HOUR=$((10#$HOUR))
 
 if [[ -z "$DATE" || -z "$HOUR" ]]; then
   usage

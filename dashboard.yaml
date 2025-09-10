@@ -679,7 +679,7 @@ views:
             square: false
             cards:
               - type: custom:button-card
-                entity: script.script_panels_timelapse
+                entity: input_boolean.timelapse_panels
                 icon: mdi:play-speed
                 name: Timelapse
                 tap_action:
@@ -695,7 +695,8 @@ views:
                   icon:
                     - color: >
                         [[[ return
-                        states['script.script_panels_timelapse'].state === 'on' ? '#FFB300' : '#03A9F4'; ]]]
+                        states['input_boolean.timelapse_panels'].state === 'on'
+                        ? '#FFB300' : '#03A9F4'; ]]]
                   name:
                     - color: white
               - type: custom:button-card

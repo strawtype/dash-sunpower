@@ -1,0 +1,50 @@
+alias: Refresh Panels on Timelapse
+description: loop through timelapse hours
+triggers:
+  - entity_id: input_boolean.timelapse_panels
+    to: "on"
+    trigger: state
+conditions: []
+actions:
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.latest_panels
+  - if:
+      - condition: state
+        entity_id: input_boolean.latest_panels
+        state: "off"
+    then:
+      - data:
+          value: 4
+        target:
+          entity_id: input_number.timelapse_hour_slider
+        action: input_number.set_value
+      - repeat:
+          while:
+            - condition: template
+              value_template: >
+                {{ (states('input_number.timelapse_hour_slider') | int(0)) < 21
+                and
+                   is_state('input_boolean.timelapse_panels', 'on') }}
+          sequence:
+            - variables:
+                current: "{{ states('input_number.timelapse_hour_slider') | int(0) }}"
+                next: "{{ current + 1 }}"
+            - data:
+                value: "{{ next }}"
+              target:
+                entity_id: input_number.timelapse_hour_slider
+              action: input_number.set_value
+            - delay:
+                hours: 0
+                minutes: 0
+                seconds: 1
+                milliseconds: 0
+  - action: input_boolean.turn_off
+    metadata: {}
+    data: {}
+    target:
+      entity_id: input_boolean.timelapse_panels
+mode: single

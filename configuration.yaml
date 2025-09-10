@@ -33,6 +33,9 @@ input_boolean:
   power_panels:
     name: Power Panels    ###  ENERGY/POWER TOGGLE
     initial: true
+  timelapse_panels:       ###  TIMELAPSE TOGGLE
+    name: Timelapse Panels
+    initial: false
 
 command_line:
   - sensor:
@@ -43,7 +46,7 @@ command_line:
         - values
       scan_interval: 99999
   - sensor:
-      name: timelapse_power_panels   ### PANELS + POWE METER, all of them, are a single sensor, in json attributes
+      name: timelapse_power_panels   ### PANELS + POWER METER, all of them, are a single sensor, in json attributes
       command: "cat /config/power/panels.json"   ### MUST MATCH ${DATA_DIR} in panels_query.sh
       scan_interval: 99999
       value_template: "{{ value_json.power }}"

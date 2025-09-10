@@ -79,10 +79,9 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 | `query_panels.sh`                   | Bash script to query InfluxDB for power/energy data   |
 | `configuration.yaml`                | Required changes for Home Assistant's configuration.yaml  |
 | `dashboard.yaml`                    | Example Home Assistant dashboard  |
-| `automation_refresh_panels_onselect.yaml` | Automation to refresh panels when selections change   |
-| `automation_refresh_graph_onlive.yaml`     | Automation to refresh graphs/panels in live mode (default: 5 min) |
-| `script_panels_timelapse.yaml` | Timelapse playback script   |
-| `panel_layout_trans.png` | Transparent background image expected in /config/www/images/
+| `automation_refresh_panels.yaml`    | Automation to refresh panels when selections change   |
+| `automation_timelapse_panels.yaml`  | Automation to refresh graphs/panels in live mode (default: 5 min) |
+| `panel_layout_trans.png`            | Transparent background image expected in /config/www/images/
 
 ---
 
@@ -110,10 +109,10 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 1. **Install Required HACS Integrations**
   - See above
 
-2. **Ensure InfluxDB is Running & Collecting Data**<br>
+2. **Setup InfluxDB**<br>
 (This setup relies on InfluxDB v1.xx to store SunPower production data.  If already setup, skip to: **Optional**.)
   - Install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository).  If setting up InfluxDB for the first time, historical data starts from now onward.
-  - Create at least 1 new user with **read/write** access to the "homeassistant" database. (e.g., `homeassistant`).
+  - Read the add-on documentation **Integrating into Home Assistant**.  Create at least 1 new user with **read/write** access to the "homeassistant" database. (e.g., `homeassistant`).
   - See the included **configuration.yaml** for a sample **INFLUXDB** configuration. Add to it your own configuration.yaml
      - Save the new username and password in `secrets.yaml` as
      ```
@@ -121,7 +120,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
      influxdb_pass: yourpassword
      ```
   - Restart Home Assistant
-  - **Optional:** create a new user with **read-only** access to the homeassistant database for the query_panels.sh script.  (e.g., `powermonitor`)
+  - **Optional:** create a new  InfluxDB user with **read-only** access to the homeassistant database for the query_panels.sh script.  (e.g., `powermonitor`)
 
 3. **Set up `query_panels.sh`**<br>
 (If you change paths make sure dashboard.yaml sensors and command match)
@@ -172,14 +171,13 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Restart Home Assistant.
 
 5. **Import Automations and Scripts**
-  - Add `automation_refresh_panels_onselect.yaml` to your automations
-  - Add `automation_refresh_graph_onlive.yaml` to your automations
-  - Add `script_panels_timelapse.yaml` to your scripts
+  - Add `automation_refresh_panels.yaml` to your automations
+  - Add `automation_timelapse_panels.yaml` to your automations
 
 6. **Load the Example Dashboard**
   - Copy `dashboard.yaml` to create a new dashboard.
-  - Add it as a new dashboard in Home Assistant’s UI.
-  - Review the notes in dashboard.yaml for customization (colors, thresholds, intervals)
+  - Add it as a new dashboard in Home Assistant’s UI (paste it).
+  - Review the notes in `dashboard.yaml` for customization (colors, thresholds, intervals)
   - Each solar panel is an individual card that needs to be associated with its corresponding sensor_id in the next step.
 
 7. **Customize the Dashboard**
