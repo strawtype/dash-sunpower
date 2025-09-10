@@ -27,7 +27,6 @@ actions:
           - data:
               entity_id: input_boolean.timelapse_panels
             action: input_boolean.turn_off
-  - choose:
       - conditions:
           - condition: template
             value_template: |
