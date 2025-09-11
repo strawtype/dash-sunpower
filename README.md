@@ -9,19 +9,21 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## 📑 Table of Contents
-1. [✨ Features](#-features)
-2. [📖 What this is](#-what-this-is)
-3. [🚫 What this is not](#-what-this-is-not)
-4. [🛠 Tested On](#-tested-on)
-5. [📦 Required Integrations](#-required-integrations)
-6. [📂 Repo Components](#-repo-components)
-7. [🖼 Screenshots](#-screenshots)
-8. [🔧 Setup Instructions](#-setup-instructions)
-9. [❗️ Troubleshooting](#-troubleshooting)
+## Table of Contents
+1. [Features](#features)
+2. [What this is](#what-this-is)
+3. [What this is not](#what-this-is-not)
+4. [Tested On](#tested-on)
+5. [Required Integrations](#required-integrations)
+6. [Repo Components](#repo-components)
+7. [Screenshots](#screenshots)
+8. [Setup Instructions](#setup-instructions)
+9. [Notes and Further Customization](#notes-and-further-customization)
+10. [Troubleshooting](#troubleshooting)
+
 
 ---
-## ✨ Features
+## Features
 
 - **Display individual solar panel production** in a custom dashboard.
 - **Select a date** to view historical data.
@@ -33,7 +35,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## 📖 What this is
+## What this is
 
 - A **Home Assistant** dashboard for **SunPower** systems using the [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) HACS integration.
 - A **bash script** (`query_panels.sh`) to query **InfluxDB** for power or energy values and save them for Home Assistant sensors.
@@ -41,7 +43,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## 🚫 What this is not
+## What this is not
 
 - ❌ This setup does **not** provide additional panel-level details.  It uses data from your SunPower PVS
 - ❌ This will **not** work without a functional [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) integration.
@@ -50,7 +52,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## 🛠 Tested On
+## Tested On
 
 - Home Assistant OS
 - SunPower PVS6
@@ -58,7 +60,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## 📦 Required Integrations
+## Required Integrations
 
 | Integration      | Repository                                    |
 |-------------------|-----------------------------------------------|
@@ -70,7 +72,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## 📂 Repo Components
+## Repo Components
 
 | File / Folder                       | Purpose                                                   |
 |------------------------------------|-----------------------------------------------------------|
@@ -83,7 +85,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## 🖼 Screenshots
+## Screenshots
 
 ### Timelapse
 <div align="center">
@@ -102,7 +104,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## 🔧 Setup Instructions
+## Setup Instructions
 
 **Before starting, consider trying this during the day. It is easier to troubleshoot when inverters are online**
 
@@ -203,7 +205,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 ---
 
-## ❗️ Troubleshooting
+## Troubleshooting
 
 **"Query failed. Is InfluxDB running?"**
   - Check the InfluxDB service is started on HomeAssistant
