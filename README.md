@@ -17,9 +17,8 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 5. [📦 Required Integrations](#-required-integrations)
 6. [📂 Repo Components](#-repo-components)
 7. [🖼 Screenshots](#-screenshots)
-8. [⚙️ Setup Instructions](#-setup-instructions)
-9. [🧩 Notes & Further Customization](#-notes--further-customization)
-10. [🛠️ Troubleshooting](#-troubleshooting)
+8. [🔧 Setup Instructions](#-setup-instructions)
+9. [⚠️ Troubleshooting](#-troubleshooting)
 
 ---
 ## ✨ Features
@@ -103,8 +102,9 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 ---
 
-## ⚙️ Setup Instructions <br>
-**Before you start, consider doing this during the day. It is easier to troubleshoot when the inverters are online**
+## 🔧 Setup Instructions
+
+**Before starting, consider trying this during the day. It is easier to troubleshoot when inverters are online**
 
 1. **Install Required HACS Integrations**
   - [Required Integrations](#-required-integrations)
@@ -203,15 +203,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 ---
 
-## 🧩 Notes & Further Customization
-
-  - The bash script is designed for **krbaker/hass-sunpower** entities — you may need to adjust entity names if using other integrations.
-  - This setup queries **historical** values provided by InfluxDB. Without stored data, graphs and selections will be empty.
-  - `query_panels.sh` only needs InfluxDB read access.
-
----
-
-## 🛠️ Troubleshooting
+## ⚠️ Troubleshooting
 
 **"Query failed. Is InfluxDB running?"**
   - Check the InfluxDB service is started on HomeAssistant
@@ -253,5 +245,5 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Check `configuration.yaml` and make sure **timelapse_power_panels** has the correct **json_attributes**.  This should be the output of `entities.txt` after `--discover`.
 
 **Missing Labels**
-  - The example dashboard is expecting a "dark" theme. Some text labels are set to "white"
+  - The example dashboard is expecting a "dark" theme. Some text labels are set to "white".
 ---
