@@ -144,7 +144,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
   ```
   - Execution rights (e.g., `chmod +x /config/scripts/query_panels.sh`).
   - Run `query_panels.sh --discover` to attempt sensor discovery. If successful, it will print the sensor entities needed in configuration.yaml and store them. (e.g., `/config/power/entities.txt`)
-  ```
+```
    /config/scripts/query_panels.sh --discover
 
 Discovering lifetime_power and matching power sensors...
@@ -158,7 +158,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 - inverter_e00122xxxxxxxxxx_lifetime_power
 - inverter_e00123xxxxxxxxxx_lifetime_power
 ...
-  ```
+```
 
 4. **Update `configuration.yaml`**
   - Review the included `configuration.yaml` and add it to your own `configuration.yaml` (sensors, inputs, shell commands).
@@ -189,24 +189,24 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - The sensor ID names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
   - In `dashboard.yaml` match each panel (card) to its corresponding entity id `power_key: inverter_e00122xxxxxxxxxx_power`.  Use the results from `query_panels.sh --discover`
   ```
-- type: custom:button-card
-  template: solar_panel
-  variables:
-    power_key: inverter_e00122xxxxxxxxxx_lifetime_power      ### EACH PANEL MUST BE ASSOCIATED TO ITS CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML timelapse_power_panels
-  style:        ### ADJUST PER PANEL, TO SET LOCATION
-    left: 7%
-    top: 30%
-  styles:
-    card:       ### HORIZONTAL LAYOUT OVERRIDE, REMOVE FOR VERTICAL
-      - height: 5vw
-      - width: 10vw
+  - type: custom:button-card
+    template: solar_panel
+    variables:
+      power_key: inverter_e00122xxxxxxxxxx_lifetime_power      ### EACH PANEL MUST BE ASSOCIATED TO ITS CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML timelapse_power_panels
+    style:        ### ADJUST PER PANEL, TO SET LOCATION
+      left: 7%
+      top: 30%
+    styles:
+      card:       ### HORIZONTAL LAYOUT OVERRIDE, REMOVE FOR VERTICAL
+        - height: 5vw
+        - width: 10vw
   ```
   - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power` to the TOTAL PRODUCTION card. The entity or device has a trailing "p" after the serial number.
   ```
-- type: custom:button-card
-  template: solar_panel
-  variables:
-    power_key: power_meter_pvs6mxxxxxxxxp_power      ####TOTAL PRODUCTION POWER METER
+  - type: custom:button-card
+    template: solar_panel
+    variables:
+      power_key: power_meter_pvs6mxxxxxxxxp_power      ####TOTAL PRODUCTION POWER METER
   ```
   - If you are using the legacy names, the device ID includes the serial number to help you identify each panel.
   - Remove or add any necessary cards to match your panel count.
