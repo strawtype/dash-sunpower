@@ -17,10 +17,10 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 5. [📦 Required Integrations](#-required-integrations)
 6. [📂 Repo Components](#-repo-components)
 7. [🖼 Screenshots](#-screenshots)
-8. [⚙️ Setup Instructions](#-setup-instructions)
+8. [⚙️ Setup Instructions](#️-setup-instructions)
 9. [🧩 Notes & Further Customization](#-notes--further-customization)
-10. [🛠️ Troubleshooting](#-troubleshooting)
-11. [📄 License](#-license)
+10. [🛠️ Troubleshooting](#️-troubleshooting)
+
 
 ---
 ## ✨ Features
