@@ -18,7 +18,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 6. [📂 Repo Components](#-repo-components)
 7. [🖼 Screenshots](#-screenshots)
 8. [🔧 Setup Instructions](#-setup-instructions)
-9. [⚠️ Troubleshooting](#-troubleshooting)
+9. [❗️ Troubleshooting](#-troubleshooting)
 
 ---
 ## ✨ Features
@@ -203,7 +203,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 ---
 
-## ⚠️ Troubleshooting
+## ❗️ Troubleshooting
 
 **"Query failed. Is InfluxDB running?"**
   - Check the InfluxDB service is started on HomeAssistant
