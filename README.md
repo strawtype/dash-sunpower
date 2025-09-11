@@ -1,4 +1,4 @@
-# Solar Panel Dashboard for Home Assistant (SunPower + InfluxDB)
+# SunPower Solar Panel Dashboard for Home Assistant
 
 <div align="center">
   <img src="screenshots/3.png" alt="Dashboard Screenshot" width="600">
@@ -18,9 +18,8 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 6. [Repo Components](#repo-components)
 7. [Screenshots](#screenshots)
 8. [Setup Instructions](#setup-instructions)
-9. [Notes and Further Customization](#notes-and-further-customization)
-10. [Troubleshooting](#troubleshooting)
-
+9. [Troubleshooting](#troubleshooting)
+10. [Credits](#credits)
 
 ---
 ## Features
@@ -56,11 +55,13 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 
 - Home Assistant OS
 - SunPower PVS6
-- InfluxDB 1.xx
+- InfluxDB 1.x
 
 ---
 
 ## Required Integrations
+
+**Built using these amazing integrations!**
 
 | Integration      | Repository                                    |
 |-------------------|-----------------------------------------------|
@@ -109,10 +110,10 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 **Before starting, consider trying this during the day. It is easier to troubleshoot when inverters are online**
 
 1. **Install Required HACS Integrations**
-  - [Required Integrations](#-required-integrations)
+  - [Required Integrations](#required-integrations)
 
 2. **Setup InfluxDB**<br>
-(This setup relies on InfluxDB v1.xx to store SunPower production data.  If already setup, skip to: **Optional**.)
+(This setup relies on InfluxDB 1.x to store SunPower production data.  If already setup, skip to: **Optional**.)
   - Install the InfluxDB Home Assistant add-on here: [Install InfluxDB](https://my.home-assistant.io/redirect/supervisor_addon/?addon=a0d7b954_influxdb&repository_url=https%3A%2F%2Fgithub.com%2Fhassio-addons%2Frepository).  If setting up InfluxDB for the first time, historical data starts from now onward.
   - Read the add-on documentation **Integrating into Home Assistant**.  Create at least 1 new user with **read/write** access to the "homeassistant" database. (e.g., `homeassistant`).
   - See the included **configuration.yaml** for a sample **INFLUXDB** configuration. Add to it your own configuration.yaml
@@ -142,7 +143,7 @@ The dashboard visualizes solar panel production over time, allows you to browse 
      PANELS_OUT="${DATA_DIR}/panels.json"
   ```
   - Execution rights (e.g., `chmod +x /config/scripts/query_panels.sh`).
-  - Run (`query_panels.sh --discover`) to attempt sensor discovery. If successful, it will print the sensor entities needed in configuration.yaml and store them. (e.g., `/config/power/entities.txt`)
+  - Run `query_panels.sh --discover` to attempt sensor discovery. If successful, it will print the sensor entities needed in configuration.yaml and store them. (e.g., `/config/power/entities.txt`)
   ```
    /config/scripts/query_panels.sh --discover
 
@@ -155,7 +156,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 - power_meter_pvs6mxxxxxxxxp_power
 - inverter_e00122xxxxxxxxxx_lifetime_power
-- inverter_e00122xxxxxxxxxx_lifetime_power
+- inverter_e00123xxxxxxxxxx_lifetime_power
 ...
   ```
 
@@ -164,9 +165,10 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Update any paths you may have changed for `query_panels.sh`.  The **shell_command** points to the location of `query_panels.sh`.
   - Review `/config/power/entities.txt`. It should contain the sunpower entities after running (`/config/scripts/query_panels.sh --discover`)
   - Replace the `json_attributes` in `configuration.yaml`, for the command line sensor **timelapse_power_panels**, with the result of `query_panels.sh --discover`.
-    ``` json_attributes:
+    ```
+       json_attributes:
         - inverter_e00122xxxxxxxxxx_lifetime_power
-        - inverter_e00122xxxxxxxxxx_lifetime_power
+        - inverter_e00123xxxxxxxxxx_lifetime_power
         - power_meter_pvs6mxxxxxxxxp_lifetime_power
     ```
     - Make sure all discovered entities are added.
@@ -187,21 +189,28 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - The sensor ID names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
   - In `dashboard.yaml` match each panel (card) to its corresponding entity id `power_key: inverter_e00122xxxxxxxxxx_power`.  Use the results from `query_panels.sh --discover`
   ```
-  - type: custom:button-card
-    template: solar_panel
-      variables:
-    power_key: inverter_e00122xxxxxxxxxx_lifetime_power
+- type: custom:button-card
+  template: solar_panel
+  variables:
+    power_key: inverter_e00122xxxxxxxxxx_lifetime_power      ### EACH PANEL MUST BE ASSOCIATED TO ITS CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML timelapse_power_panels
+  style:        ### ADJUST PER PANEL, TO SET LOCATION
+    left: 7%
+    top: 30%
+  styles:
+    card:       ### HORIZONTAL LAYOUT OVERRIDE, REMOVE FOR VERTICAL
+      - height: 5vw
+      - width: 10vw
   ```
-  - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power` to the TOTAL PRDUCTION card. The entity or device has a trailing "p" after the serial number.
+  - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power` to the TOTAL PRODUCTION card. The entity or device has a trailing "p" after the serial number.
   ```
-  - type: custom:button-card
-    template: solar_panel
-    variables:
-      power_key: power_meter_pvs6mxxxxxxxxp_power      ####TOTAL PRODUCTION POWER METER
+- type: custom:button-card
+  template: solar_panel
+  variables:
+    power_key: power_meter_pvs6mxxxxxxxxp_power      ####TOTAL PRODUCTION POWER METER
   ```
   - If you are using the legacy names, the device ID includes the serial number to help you identify each panel.
   - Remove or add any necessary cards to match your panel count.
-  - Some buttons have white text, which may hard to read in "light" themes.
+  - Buttons use white text and may be hard to read if you're using a light theme.
 
 ---
 
@@ -216,8 +225,8 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - In the absence of "Query failed", this means the entities could not be found in InfluxDB
   - Check the InfluxDB user (in `query_panels.sh`), has read access to the `homeassistant` database
   - Check the InfluxDB `configuration.yaml` details, and make sure homeassistant restarts if changed.
-  - Query the database using with `SHOW TAG VALUES FROM "kWh" WITH KEY = "entity_id"`
-    - This should all your energy entities. If missing, check [krbaker/hass-sunpower] and InfluxDB settings (the database is not collecting).
+  - Query the database using: `SHOW TAG VALUES FROM "kWh" WITH KEY = "entity_id"`
+    - This should list all your energy entities. If missing, check [krbaker/hass-sunpower] and InfluxDB settings (the database is not collecting).
     - SunPower entities exist, but `--discover` didn't find them?
       -  Try adding them manually to `/config/power/entities.txt`
       ```
@@ -249,3 +258,19 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 **Missing Labels**
   - The example dashboard is expecting a "dark" theme. Some text labels are set to "white".
 ---
+
+## Credits
+
+This dashboard relies on several amazing Home Assistant integrations.
+
+- [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) — SunPower integration.
+- [custom-cards/button-card](https://github.com/custom-cards/button-card) — Custom button cards.
+- [thomasloven/lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod) — Styling and card modifications.
+- [RomRider/apexcharts-card](https://github.com/RomRider/apexcharts-card) — Charts and graphs.
+- [piitaya/lovelace-mushroom](https://github.com/piitaya/lovelace-mushroom) — Number Input slider.
+
+Thanks to everyone involved in these projects for their excellent work!
+
+- [u/badxhabit28](https://reddit.com/user/badxhabit28) — Thanks for helping me test!
+---
+
