@@ -4,8 +4,7 @@
   <img src="screenshots/3.png" alt="Dashboard Screenshot" width="600">
 </div>
 
-A Home Assistant dashboard designed for **SunPower** PV systems, built using several HACS components, InfluxDB for data storage and a simple bash script for querying.<br>
-The dashboard visualizes solar panel production over time, allows you to browse historical data, and provides a live mode for up-to-date readings.
+This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower), and several other HACS components. A Bash script powers the data queries, enabling solar production visualization over time, historical browsing, and latest updates in "live" mode.
 
 ---
 
@@ -182,6 +181,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Copy `dashboard.yaml` to create a new dashboard.
   - Add it as a new dashboard in Home Assistant’s UI (paste it).
   - Review the notes in `dashboard.yaml` for customization (colors, thresholds, intervals).
+  - The dashboard is responsive and displays best in portrait orientation.
   - Each solar panel is an individual card that needs to be associated with its corresponding sensor_id in the next step.
 
 7. **Customize the Dashboard**
