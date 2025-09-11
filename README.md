@@ -10,16 +10,16 @@ The dashboard visualizes solar panel production over time, allows you to browse 
 ---
 
 ## 📑 Table of Contents
-1. [Features](#features)
-2. [What this is](#what-this-is)
-3. [What this is not](#what-this-is-not)
-4. [Tested On](#tested-on)
-5. [Required Integrations](#required-integrations)
-6. [Repo Components](#repo-components)
-7. [Screenshots](#screenshots)
-8. [Setup Instructions](#setup-instructions)
-9. [Notes & Further Customization](#notes--further-customization)
-10. [Troubleshooting](#troubleshooting)
+1. [✨ Features](#-features)
+2. [📖 What this is](#-what-this-is)
+3. [🚫 What this is not](#-what-this-is-not)
+4. [🛠 Tested On](#-tested-on)
+5. [📦 Required Integrations](#-required-integrations)
+6. [📂 Repo Components](#-repo-components)
+7. [🖼 Screenshots](#-screenshots)
+8. [⚙️ Setup Instructions](#-setup-instructions)
+9. [🧩 Notes & Further Customization](#-notes--further-customization)
+10. [🛠️ Troubleshooting](#-troubleshooting)
 
 ---
 ## ✨ Features
