@@ -98,7 +98,11 @@ writegraph () {
     fi
   fi
   if [[ "$MODE" == "ENERGY" || "$MODE" == "LIVE" ]]; then
-    entity="${entity/power/lifetime_power}"
+    if [[ "$entity" == *_power ]]; then
+      entity="${entity/_power/_lifetime_power}"
+    elif [[ "$entity" == power* ]]; then
+      entity="${entity/power/lifetime_power}"  ##legacy, or override
+    fi
   fi
 
   QUERY="SELECT FIRST(value) FROM autogen.${UNITS} WHERE entity_id = '${entity}' AND time >= '${D_START}' AND time <= '${D_END}' GROUP BY time(1h) fill(0)"
@@ -124,11 +128,12 @@ writepanels () {
   if [[ -s "$ENTITIES" ]]; then
     mapfile -t entities < <(sed 's/^- //' "$ENTITIES")
     if [[ "$MODE" == "ENERGY" || "$MODE" == "LIVE" ]]; then
-      #echo "Using $ENTITIES for panels"
       for i in "${!entities[@]}"; do
-        if [[ "${entities[i]}" == *power* ]]; then
-          entities[i]="${entities[i]/power/lifetime_power}"
-        fi
+         if [[ "${entities[i]}" == *_power ]]; then
+          entities[i]="${entities[i]/_power/_lifetime_power}"
+         elif [[ "${entities[i]}" == power* ]]; then
+           entities[i]="${entities[i]/power/lifetime_power}"  ##legacy, or override
+         fi
       done
     fi
   else
