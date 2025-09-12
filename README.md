@@ -178,9 +178,9 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Add `automation_timelapse_panels.yaml` to your automations
 
 6. **Load the Example Dashboard**
-  - Copy `dashboard.yaml` to create a new dashboard.
-  - Add it as a new dashboard in Home Assistant’s UI (paste it).
-  - Review the notes in `dashboard.yaml` for customization (colors, thresholds, intervals).
+  - Copy `panel_layout_trans.png` to `/config/www/images/`.
+  - Copy `dashboard.yaml` and add it as a new dashboard in Home Assistant’s UI.
+  - Review the notes in [dashboard.yaml](https://github.com/strawtype/dash-sunpower/blob/master/dashboard.yaml) for customization (colors, thresholds, intervals).  Some comments will not get saved in the Home Assistant UI.
   - The dashboard is responsive and displays best in portrait orientation.
   - Each solar panel is an individual card that needs to be associated with its corresponding sensor_id in the next step.
 
