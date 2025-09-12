@@ -89,12 +89,12 @@ writegraph () {
   local entity
   if [[ -s "$ENTITIES" ]]; then
     local power
-    power=$(sed 's/^- //' "$ENTITIES" | grep -E '^power$|_power$' | head -n 1)
+    power=$(sed 's/^- //' "$ENTITIES" | grep 'power_meter' | head -n 1)
     if [[ -n "$power" ]]; then
       #echo "Using $ENTITIES"
       entity="$power"
     else
-      entity="power"
+      entity="power"  ###NO MATCH, OVERRIDE THE MAIN POWER ENTITY HERE.
     fi
   fi
   if [[ "$MODE" == "ENERGY" || "$MODE" == "LIVE" ]]; then
