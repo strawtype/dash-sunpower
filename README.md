@@ -154,8 +154,8 @@ Found data for inverter_e00122xxxxxxxxxx_power matched from inverter_e00122xxxxx
 Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 - power_meter_pvs6mxxxxxxxxp_power
-- inverter_e00122xxxxxxxxxx_lifetime_power
-- inverter_e00123xxxxxxxxxx_lifetime_power
+- inverter_e00122xxxxxxxxxx_power
+- inverter_e00123xxxxxxxxxx_power
 ...
 ```
 
@@ -166,9 +166,9 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - Replace the `json_attributes` in `configuration.yaml`, for the command line sensor **timelapse_power_panels**, with the result of `query_panels.sh --discover`.
     ```
        json_attributes:
-        - inverter_e00122xxxxxxxxxx_lifetime_power
-        - inverter_e00123xxxxxxxxxx_lifetime_power
-        - power_meter_pvs6mxxxxxxxxp_lifetime_power
+        - inverter_e00122xxxxxxxxxx_power
+        - inverter_e00123xxxxxxxxxx_power
+        - power_meter_pvs6mxxxxxxxxp_power
     ```
     - Make sure all discovered entities are added.
   - Restart Home Assistant.
@@ -192,7 +192,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
   - type: custom:button-card
     template: solar_panel
     variables:
-      power_key: inverter_e00122xxxxxxxxxx_lifetime_power      ### EACH PANEL MUST BE ASSOCIATED TO ITS CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML timelapse_power_panels
+      power_key: inverter_e00122xxxxxxxxxx_power      ### EACH PANEL MUST BE ASSOCIATED TO ITS CORRESPONDING JSON ATTRIBUTE IN CONFIGURATION.YAML timelapse_power_panels
     style:        ### ADJUST PER PANEL, TO SET LOCATION
       left: 7%
       top: 30%
