@@ -51,10 +51,10 @@ command_line:
       scan_interval: 99999
       value_template: "{{ value_json.power }}"
       json_attributes:
-        - inverter_e00122xxxxxxxxxx_lifetime_power
-        - inverter_e00122xxxxxxxxxx_lifetime_power   ### replace these attributes with the output of /config/scripts/query_panels.sh --discover or output in /config/power/entities.txt
-        - inverter_e00122xxxxxxxxxx_lifetime_power   ### each needs to be associated with a panel in dashboard.yaml
-        - power_meter_pvs6mxxxxxxxxp_lifetime_power
+        - inverter_e00122xxxxxxxxxx_power
+        - inverter_e00122xxxxxxxxxx_power   ### replace these attributes with the output of /config/scripts/query_panels.sh --discover or output in /config/power/entities.txt
+        - inverter_e00122xxxxxxxxxx_power   ### each needs to be associated with a panel in dashboard.yaml
+        - power_meter_pvs6mxxxxxxxxp_power
 
 shell_command:   ### call to query_panels.sh script
   query_panels: "/config/scripts/query_panels.sh -d {{ day }} -h {{ hour }} -m {{ mode }}"
