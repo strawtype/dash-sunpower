@@ -14,7 +14,7 @@ button_card_templates:
       [[[
         let units
         let result
-        const updater = states['sensor.power']?.state;                         //force an update when "power" updates, (forces panels to refresh sensor values)
+        const updater = states[`sensor.${variables.power_key}`]?.state;                         //force an update when "power" updates, (forces panels to refresh sensor values)
         const power = states['input_boolean.power_panels']?.state === 'on';    //power mode, off is energy
         const latest = states['input_boolean.latest_panels']?.state === 'on';  //live mode , off is historical
         const val = latest
@@ -399,7 +399,7 @@ views:
                       }
                       let val;
                       if (power && latest) {
-                        val = parseFloat(states['sensor.power']?.state ?? 0);
+                        val = parseFloat(states[`sensor.${variables.power_key}`]?.state ?? 0);
                       } else if (!power && latest) {
                         const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                         const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
@@ -414,7 +414,7 @@ views:
                       }
                       const hour = latest
                         ? (() => {
-                            const lastUpdated = new Date(states['sensor.power'].last_updated);
+                            const lastUpdated = new Date(states[`sensor.${variables.power_key}`].last_updated);
                             const h = lastUpdated.getHours().toString().padStart(2, '0');
                             const m = lastUpdated.getMinutes().toString().padStart(2, '0');
                             return `${h}:${m}`;
@@ -438,7 +438,7 @@ views:
                             const latest = states['input_boolean.latest_panels'].state === 'on';
                             let val;
                             if (power && latest) {
-                              val = parseFloat(states['sensor.power']?.state ?? 0);
+                              val = parseFloat(states[`sensor.${variables.power_key}`]?.state ?? 0);
                             } else if (!power && latest) {
                               const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                               const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
