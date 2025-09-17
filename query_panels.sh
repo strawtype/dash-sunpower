@@ -65,7 +65,7 @@ discover() {
 
   > "${DATA_DIR}/entities.txt"
   for lifetime_entity in "${lifetime_entities[@]}"; do
-    if [[ "$lifetime_entity" =~ (c_power|pv_power)$ ]]; then #skip consumption and virtual
+    if [[ "$lifetime_entity" =~ (c_|pv_)(lifetime_)?power$ ]]; then #skip consumption and virtual.  thanks u/babgvant!
       continue
     fi
     power_entity="${lifetime_entity/_lifetime/}"
