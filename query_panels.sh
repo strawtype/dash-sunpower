@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ####Config####
-INFLUXDB_HOST="localhost:8086"
+INFLUXDB_HOST="a0d7b954-influxdb:8086"
      USERNAME="powermonitor"
      PASSWORD="password"
      DATABASE="homeassistant"
