@@ -57,11 +57,15 @@ discover() {
   if [ ${#lifetime_entities[@]} -eq 0 ]; then
     echo "No lifetime_power entities found."
     exit 0
+  else
+    echo ""
+    echo "Use below in configuration.yaml for the timelapse_power_panels json_attributes"
+    echo ""
   fi
 
   > "${DATA_DIR}/entities.txt"
   for lifetime_entity in "${lifetime_entities[@]}"; do
-    if [[ "$lifetime_entity" == "*c_power" || "$lifetime_entity" == "*pv_power" ]]; then  #skip consumption and virtual.  thanks! u/badxhabit28
+    if [[ "$lifetime_entity" == *c_power || "$lifetime_entity" == *pv_power ]]; then  #skip consumption and virtual.  thanks! u/badxhabit28
       continue
     fi
     power_entity="${lifetime_entity/_lifetime/}"
@@ -71,14 +75,12 @@ discover() {
     result=$(queryflux)
 
     if echo "$result" | jq -e '.results[0].series[0].values and (.results[0].series[0].values | length > 0)' > /dev/null 2>&1; then
-      echo "Found $power_entity matched from $lifetime_entity"
+      #echo "Found $power_entity matched from $lifetime_entity"
       echo "- $power_entity" >> "${DATA_DIR}/entities.txt"
+      echo "        - $power_entity"
     fi
   done
-  echo ""
-  echo "Use below in configuration.yaml for the timelapse_power_panels json_attributes"
-  echo ""
-  cat  ${DATA_DIR}/entities.txt
+  
   echo ""
   echo "Use above in configuration.yaml for the timelapse_power_panels json_attributes"
   echo "Saved at $ENTITIES"
