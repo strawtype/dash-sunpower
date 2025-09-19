@@ -187,7 +187,8 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 7. **Customize the Dashboard**
   - To accurately place the panels on the dashboard you must already know their layout or physical placement.  Consult your install documentation or the SunPower app to identify the location of each panel by serial number.
   - The sensor ID names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
-  - In `dashboard.yaml` match each panel (card) to its corresponding entity id `power_key: inverter_e00122xxxxxxxxxx_power`.  Use the results from `query_panels.sh --discover`
+  - In `dashboard.yaml` replace the template `triggers_update: power_meter_pvs6mxxxxxxxxp_power` with the main production meter entity.
+  - Match each panel (card) to its corresponding entity id `power_key: inverter_e00122xxxxxxxxxx_power`.  Use the results from `query_panels.sh --discover`
   ```
   - type: custom:button-card
     template: solar_panel
@@ -257,6 +258,14 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 **Missing Labels**
   - The example dashboard is expecting a "dark" theme. Some text labels are set to "white".
+
+**Live Mode doesnt update, needs a refresh**
+  - Trigger the button_card template in `dashboard.yaml` with the main production power meter:
+      ```
+button_card_templates:
+  solar_panel:
+    triggers_update: power_meter_pvs6mxxxxxxxxp_power   ####TOTAL PRODUCTION POWER METER
+      ```
 ---
 
 ## Credits

@@ -4,6 +4,7 @@ button_card_templates:
     show_name: false
     show_icon: false
     show_state: true
+    triggers_update: power_meter_pvs6mxxxxxxxxp_power   ####TOTAL PRODUCTION POWER METER
     tap_action:
       action: more-info
       entity: |
