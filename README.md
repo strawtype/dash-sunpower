@@ -261,11 +261,11 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 **Live Mode doesnt update, needs a refresh**
   - Trigger the button_card template in `dashboard.yaml` with the main production power meter:
-      ```
+   ```
 button_card_templates:
   solar_panel:
     triggers_update: power_meter_pvs6mxxxxxxxxp_power   ####TOTAL PRODUCTION POWER METER
-      ```
+   ```
 ---
 
 ## Credits
