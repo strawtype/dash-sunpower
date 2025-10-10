@@ -11,8 +11,9 @@ INFLUXDB_HOST="localhost:8086"
     GRAPH_OUT="${DATA_DIR}/graph.json"
    PANELS_OUT="${DATA_DIR}/panels.json"
 
-  INTEGRATION=""  ### defaults to "hass-sunpower" (https://github.com/krbaker/hass-sunpower).
-                  ### override with "pvs-hass" (https://github.com/SunStrong-Management/pvs-hass)
+  INTEGRATION=""  ### "hass-sunpower" (https://github.com/krbaker/hass-sunpower). (default)
+                  ### "pvs-hass" (https://github.com/SunStrong-Management/pvs-hass)
+                  ### "custom"   (see below)
 ####Config end###
 
 usage () {
@@ -68,12 +69,11 @@ discover() {
   echo "" > "${ENTITIES}"
   for lifetime_entity in "${lifetime_entities[@]}"; do
 
-   # if [[ ! "$lifetime_entity" =~ (${EN}|${METER}) ]]; then
-   #   continue
-   # fi
-
-    power_entity="${lifetime_entity/${EN}/${PW}}"
-    power_entity="${lifetime_entity/${EN_METER}/${PW_METER}}"
+    if [[ "$lifetime_entity" =~ ${METER}${PW_METER} ]]; then
+      power_entity="${lifetime_entity/${EN_METER}/${PW_METER}}"
+    else
+      power_entity="${lifetime_entity/${EN}/${PW}}"
+    fi
 
     QUERY="SELECT * FROM \"kW\" WHERE \"entity_id\" = '$power_entity' LIMIT 1"
     result=$(queryflux)
