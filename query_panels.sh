@@ -10,7 +10,9 @@ INFLUXDB_HOST="localhost:8086"
      ENTITIES="${DATA_DIR}/entities.txt"
     GRAPH_OUT="${DATA_DIR}/graph.json"
    PANELS_OUT="${DATA_DIR}/panels.json"
-  PANEL_COUNT=30  #ignored after --discover
+
+  INTEGRATION=""  ### defaults to "hass-sunpower" (https://github.com/krbaker/hass-sunpower).
+                  ### override with "pvs-hass" (https://github.com/SunStrong-Management/pvs-hass)
 ####Config end###
 
 usage () {
@@ -46,16 +48,16 @@ queryflux () {
   fi
 }
 
-
-
 discover() {
-  echo "Discovering lifetime_power and matching power sensors..."
+  echo ""
+  echo "Expecting integration '$INTEGRATION'"
+  echo "Discovering $EN and matching $PW sensors..."
 
   QUERY='SHOW TAG VALUES FROM "kWh" WITH KEY = "entity_id"'
-  readarray -t lifetime_entities < <(queryflux | jq -r '.results[0].series[0].values[][1] // empty' | grep 'lifetime_power')
+  readarray -t lifetime_entities < <(queryflux | jq -r '.results[0].series[0].values[][1] // empty' | grep -E "$INVERTER|${METER}${EN_METER}")
 
   if [ ${#lifetime_entities[@]} -eq 0 ]; then
-    echo "No lifetime_power entities found."
+    echo "No entities found."
     exit 0
   else
     echo ""
@@ -63,20 +65,22 @@ discover() {
     echo ""
   fi
 
-  > "${DATA_DIR}/entities.txt"
+  echo "" > "${ENTITIES}"
   for lifetime_entity in "${lifetime_entities[@]}"; do
-    if [[ "$lifetime_entity" =~ (c_|pv_)(lifetime_)?power$ ]]; then #skip consumption and virtual.  thanks u/babgvant!
-      continue
-    fi
-    power_entity="${lifetime_entity/_lifetime/}"
-    power_entity="${power_entity/lifetime_/}"
+
+   # if [[ ! "$lifetime_entity" =~ (${EN}|${METER}) ]]; then
+   #   continue
+   # fi
+
+    power_entity="${lifetime_entity/${EN}/${PW}}"
+    power_entity="${lifetime_entity/${EN_METER}/${PW_METER}}"
 
     QUERY="SELECT * FROM \"kW\" WHERE \"entity_id\" = '$power_entity' LIMIT 1"
     result=$(queryflux)
 
     if echo "$result" | jq -e '.results[0].series[0].values and (.results[0].series[0].values | length > 0)' > /dev/null 2>&1; then
       #echo "Found $power_entity matched from $lifetime_entity"
-      echo "- $power_entity" >> "${DATA_DIR}/entities.txt"
+      echo "- $power_entity" >> "${ENTITIES}"
       echo "        - $power_entity"
     fi
   done
@@ -86,25 +90,20 @@ discover() {
   echo "Saved at $ENTITIES"
 }
 
-
 writegraph () {
   local entity
   if [[ -s "$ENTITIES" ]]; then
-    local power
-    power=$(sed 's/^- //' "$ENTITIES" | grep 'power_meter' | head -n 1)
-    if [[ -n "$power" ]]; then
+    local meter
+    meter=$(sed 's/^- //' "$ENTITIES" | grep -E "${METER}${PW_METER}" | head -n 1)
+    if [[ -n "$meter" ]]; then
       #echo "Using $ENTITIES"
-      entity="$power"
+      entity="$meter"
     else
       entity="power"  ###NO MATCH, OVERRIDE THE MAIN POWER ENTITY HERE.
     fi
   fi
   if [[ "$MODE" == "ENERGY" || "$MODE" == "LIVE" ]]; then
-    if [[ "$entity" == *_power ]]; then
-      entity="${entity/_power/_lifetime_power}"
-    elif [[ "$entity" == power* ]]; then
-      entity="${entity/power/lifetime_power}"  ##legacy, or override
-    fi
+      entity="${entity/${PW_METER}/${EN_METER}}"
   fi
 
   QUERY="SELECT FIRST(value) FROM autogen.${UNITS} WHERE entity_id = '${entity}' AND time >= '${D_START}' AND time <= '${D_END}' GROUP BY time(1h) fill(0)"
@@ -131,20 +130,13 @@ writepanels () {
     mapfile -t entities < <(sed 's/^- //' "$ENTITIES")
     if [[ "$MODE" == "ENERGY" || "$MODE" == "LIVE" ]]; then
       for i in "${!entities[@]}"; do
-         if [[ "${entities[i]}" == *_power ]]; then
-          entities[i]="${entities[i]/_power/_lifetime_power}"
-         elif [[ "${entities[i]}" == power* ]]; then
-           entities[i]="${entities[i]/power/lifetime_power}"  ##legacy, or override
+         if [[ "${entities[i]}" =~ ${METER}${PW_METER} ]]; then
+          entities[i]="${entities[i]/${PW_METER}/${EN_METER}}"
+         else
+          entities[i]="${entities[i]/${PW}/${EN}}"
          fi
       done
     fi
-  else
-    # the old way
-    local count=$((PANEL_COUNT + 2))
-    entities+=("${EN}power")
-    for (( i=3; i<=count; i++ )); do
-      entities+=("${EN}power_$i")
-    done
   fi
   local or_entities=""
   for entity in "${entities[@]}"; do
@@ -161,6 +153,36 @@ writepanels () {
   #strip out lifetime_, fill with 0 when missing, write
   queryflux | jq -s -r '.[0].results[0].series[]? | { ((.tags.entity_id | sub("lifetime_"; ""))): (.values[0][1] // 0 | tonumber ) }' | jq -s add > "$PANELS_OUT"
 }
+
+
+
+: "${INTEGRATION:=hass-sunpower}"
+case $INTEGRATION in
+   "hass-sunpower")    METER="power_meter_.*p_"
+                    EN_METER="lifetime_power"
+                    PW_METER="power"
+                          EN="lifetime_power"
+                          PW="power"
+                    INVERTER="inverter_*_lifetime_power";;
+
+        "pvs-hass")    METER="meter_.*p_"
+                    EN_METER="net_lifetime_energy"
+                    PW_METER="3_phase_power"
+                          EN="lifetime_production"
+                          PW="current_power_production"
+                    INVERTER="mi_.*_lifetime_production";;
+
+          "custom")    METER=""
+                    EN_METER="lifetime_power"
+                    PW_METER="power"
+                          EN="lifetime_power"
+                          PW="power"
+                    INVERTER="lifetime_power_.*";;
+
+                 *) echo "Invalid integration $INTEGRATION";
+                    usage
+                    exit 1;;
+esac
 
 mkdir -p $DATA_DIR
 
@@ -203,12 +225,9 @@ fi
 
 
 case $MODE in
-   "POWER") UNITS="kW"
-               EN="";;
-  "ENERGY") UNITS="kWh"
-               EN="lifetime_" ;;
-    "LIVE") UNITS="kWh"                    #LIVE ENERGY
-               EN="lifetime_" ;;
+   "POWER") UNITS="kW" ;;
+  "ENERGY") UNITS="kWh";;
+    "LIVE") UNITS="kWh";;              #LIVE ENERGY
          *) echo "Invalid mode: $MODE";
             usage
             exit 1;;
