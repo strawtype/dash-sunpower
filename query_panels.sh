@@ -244,7 +244,11 @@ T_START=$(date -u -d "@$(date -d "${TODAY} 00:00:00" +%s)" +"%Y-%m-%dT%H:%M:%SZ"
 
 if [ -n "$ENTITY" ]; then   #tests
   if [[ "$MODE" == "ENERGY" || "$MODE" == "LIVE" ]]; then
-      ENTITY="${ENTITY/power/lifetime_power}"
+      if [[ "$ENTITY" =~ ${METER}${PW_METER} ]]; then
+        entities[i]="${entities[i]/${PW_METER}/${EN_METER}}"
+      else
+        ENTITY="${ENTITY/${PW}/${EN}}"
+      fi
   fi
   QUERY="SELECT ${POLL}(value) FROM autogen.${UNITS} WHERE entity_id = '${ENTITY}' AND time >= '${H_START}' AND time <= '${H_END}'"
   queryflux | jq -r '.results[0].series[0].values[0][1] // 0' 2>/dev/null || echo "0"
