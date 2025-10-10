@@ -65,11 +65,11 @@ This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [
 | Integration      | Repository                                    |
 |-------------------|-----------------------------------------------|
 | `hass-sunpower`   | [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) |
+| `pvs-hass`        | [SunStrong-Management/pvs-hass](https://github.com/SunStrong-Management/pvs-hass) |
 | `button-card`     | [custom-cards/button-card](https://github.com/custom-cards/button-card) |
 | `mod-card`        | [thomasloven/lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod) |
 | `apexcharts-card` | [RomRider/apexcharts-card](https://github.com/RomRider/apexcharts-card) |
 | `mushroom`        | [piitaya/lovelace-mushroom](https://github.com/piitaya/lovelace-mushroom) |
-
 ---
 
 ## Repo Components
@@ -109,6 +109,7 @@ This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [
 **Before starting, consider trying this during the day. It is easier to troubleshoot when inverters are online**
 
 1. **Install Required HACS Integrations**
+  - `query_panels.sh` supports both `hass-sunpower` and `pvs-hass` integrations. Defaults to `hass-sunpower`.
   - [Required Integrations](#required-integrations)
 
 2. **Setup InfluxDB**<br>

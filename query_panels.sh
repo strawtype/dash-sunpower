@@ -150,8 +150,20 @@ writepanels () {
   else                                  #power
     QUERY="SELECT FIRST(value) FROM autogen.${UNITS} WHERE (${or_entities}) AND time >= '${H_START}' and time <= '${H_END}'  GROUP BY entity_id"
   fi
-  #strip out lifetime_, fill with 0 when missing, write
-  queryflux | jq -s -r '.[0].results[0].series[]? | { ((.tags.entity_id | sub("lifetime_"; ""))): (.values[0][1] // 0 | tonumber ) }' | jq -s add > "$PANELS_OUT"
+  #revert to power names
+  queryflux | jq -s -r \
+    --arg en "$EN" \
+    --arg pw "$PW" \
+    --arg enm "$EN_METER" \
+    --arg pwm "$PW_METER" '
+    .[0].results[0].series[]?
+    | {
+        ((.tags.entity_id
+          | sub($en; $pw)
+          | sub($enm; $pwm)
+        )):
+        (.values[0][1] // 0 | tonumber)
+      }' | jq -s add > "$PANELS_OUT"
 }
 
 
