@@ -4,7 +4,7 @@
   <img src="screenshots/3.png" alt="Dashboard Screenshot" width="600">
 </div>
 
-This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower), and several other HACS components. A Bash script powers the data queries, enabling solar production visualization over time, historical browsing, and latest updates in "live" mode.
+This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower), [SunStrong-Management/pvs-hass](https://github.com/SunStrong-Management/pvs-hass), and several other HACS components. A Bash script powers the data queries, enabling solar production visualization over time, historical browsing, and latest updates in "live" mode.
 
 ---
 
@@ -35,7 +35,7 @@ This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [
 
 ## What this is
 
-- A **Home Assistant** dashboard for **SunPower** systems using the [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) HACS integration.
+- A **Home Assistant** dashboard for **SunPower** systems using the [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) and [SunStrong-Management/pvs-hass](https://github.com/SunStrong-Management/pvs-hass) HACS integrations.
 - A **bash script** (`query_panels.sh`) to query **InfluxDB** for power or energy values and save them for Home Assistant sensors.
 - An **example dashboard** (`dashboard.yaml`) that uses the queried data.  You need to customize your own panel layout.
 
@@ -142,22 +142,27 @@ This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [
       GRAPH_OUT="${DATA_DIR}/graph.json"
      PANELS_OUT="${DATA_DIR}/panels.json"
   ```
+  - Set the integration polling your PVS.  (defaults to `hass-sunpower`)
+  ```
+    INTEGRATION="pvs-hass"  ### "hass-sunpower" (https://github.com/krbaker/hass-sunpower). (default)
+                            ### "pvs-hass"      (https://github.com/SunStrong-Management/pvs-hass)
+                            ### "custom"        (see below)
+  ```
+
   - Execution rights (e.g., `chmod +x /config/scripts/query_panels.sh`).
   - Run `query_panels.sh --discover` to attempt sensor discovery. If successful, it will print the sensor entities needed in configuration.yaml and store them. (e.g., `/config/power/entities.txt`)
+  - Sensor IDs will vary depending on integration, hass-sunpower is used in most examples.
 ```
    /config/scripts/query_panels.sh --discover
 
-Discovering lifetime_power and matching power sensors...
+  Expecting integration 'hass-sunpower'
+  Discovering lifetime_power and matching power sensors...
 
-Found data for power_meter_pvs6mxxxxxxxxp_power matched from power_meter_pvs6mxxxxxxxxp_lifetime_power
-Found data for inverter_e00122xxxxxxxxxx_power matched from inverter_e00122xxxxxxxxxx_lifetime_power
+  Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
-Use below in configuration.yaml for the timelapse_power_panels json_attributes
-
-- power_meter_pvs6mxxxxxxxxp_power
-- inverter_e00122xxxxxxxxxx_power
-- inverter_e00123xxxxxxxxxx_power
-...
+       - power_meter_pvs6mxxxxxxxxp_power
+       - inverter_e00122xxxxxxxxxx_power
+       - inverter_e00123xxxxxxxxxx_power
 ```
 
 4. **Update `configuration.yaml`**
@@ -187,9 +192,9 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
 
 7. **Customize the Dashboard**
   - To accurately place the panels on the dashboard you must already know their layout or physical placement.  Consult your install documentation or the SunPower app to identify the location of each panel by serial number.
-  - The sensor ID names have changed over time but they are usually "power_xx" (legacy) or "inverter_e00122xxxxxxxxxx_power" (new).
-  - In `dashboard.yaml` replace the template `triggers_update: power_meter_pvs6mxxxxxxxxp_power` with the main production meter entity.
-  - Match each panel (card) to its corresponding entity id `power_key: inverter_e00122xxxxxxxxxx_power`.  Use the results from `query_panels.sh --discover`
+  - Use the results from `query_panels.sh --discover`
+  - In `dashboard.yaml` replace the template `triggers_update: power_meter_pvs6mxxxxxxxxp_power` with the main production meter entity.  (pvs-hass uses: `meter_pvs6mXXXXXXXp_3_phase_power`)
+  - Match each panel (card) to its corresponding entity id `power_key: inverter_e00122xxxxxxxxxx_power`. (pvs-hass uses: `mi_e00XXXXXXXXXXXX_current_power_production`)
   ```
   - type: custom:button-card
     template: solar_panel
@@ -203,7 +208,7 @@ Use below in configuration.yaml for the timelapse_power_panels json_attributes
         - height: 5vw
         - width: 10vw
   ```
-  - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power` to the TOTAL PRODUCTION card. The entity or device has a trailing "p" after the serial number.
+  - Match the main production sensor `power_key: power_meter_pvs6mxxxxxxxxp_power` to the TOTAL PRODUCTION card. The entity or device has a trailing "p" after the serial number. (pvs-hass uses: `meter_pvs6mXXXXXXXp_3_phase_power`)
   ```
   - type: custom:button-card
     template: solar_panel
@@ -274,6 +279,7 @@ button_card_templates:
 This dashboard relies on several amazing Home Assistant integrations.
 
 - [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) — SunPower integration.
+- [SunStrong-Management/pvs-hass](https://github.com/SunStrong-Management/pvs-hass) - SunStong integration.
 - [custom-cards/button-card](https://github.com/custom-cards/button-card) — Custom button cards.
 - [thomasloven/lovelace-card-mod](https://github.com/thomasloven/lovelace-card-mod) — Styling and card modifications.
 - [RomRider/apexcharts-card](https://github.com/RomRider/apexcharts-card) — Charts and graphs.
