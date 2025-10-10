@@ -14,6 +14,8 @@ INFLUXDB_HOST="localhost:8086"
   INTEGRATION=""  ### "hass-sunpower" (https://github.com/krbaker/hass-sunpower). (default)
                   ### "pvs-hass" (https://github.com/SunStrong-Management/pvs-hass)
                   ### "custom"   (see below)
+                  ### always run --discover after changing INTEGRATION
+
 ####Config end###
 
 usage () {
@@ -69,7 +71,7 @@ discover() {
   echo "" > "${ENTITIES}"
   for lifetime_entity in "${lifetime_entities[@]}"; do
 
-    if [[ "$lifetime_entity" =~ ${METER}${PW_METER} ]]; then
+    if [[ "$lifetime_entity" =~ ${METER}${EN_METER} ]]; then
       power_entity="${lifetime_entity/${EN_METER}/${PW_METER}}"
     else
       power_entity="${lifetime_entity/${EN}/${PW}}"

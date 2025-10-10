@@ -35,8 +35,8 @@ This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [
 
 ## What this is
 
-- A **Home Assistant** dashboard for **SunPower** systems using the [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) and [SunStrong-Management/pvs-hass](https://github.com/SunStrong-Management/pvs-hass) HACS integrations.
-- A **bash script** (`query_panels.sh`) to query **InfluxDB** for power or energy values and save them for Home Assistant sensors.
+- A **Home Assistant dashboard** for **SunPower** systems using the [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) or [SunStrong-Management/pvs-hass](https://github.com/SunStrong-Management/pvs-hass) HACS integration.
+- A **bash script** (`query_panels.sh`) to query **InfluxDB** for power or energy values and save them as Home Assistant sensors.
 - An **example dashboard** (`dashboard.yaml`) that uses the queried data.  You need to customize your own panel layout.
 
 ---
@@ -44,7 +44,7 @@ This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [
 ## What this is not
 
 - ❌ This setup does **not** provide additional panel-level details.  It uses data from your SunPower PVS
-- ❌ This will **not** work without a functional [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) integration.
+- ❌ This will **not** work without a functional [krbaker/hass-sunpower](https://github.com/krbaker/hass-sunpower) or [SunStrong-Management/pvs-hass](https://github.com/SunStrong-Management/pvs-hass) integration.
 - ❌ It will **not** retroactively populate historical data — InfluxDB will collect data going forward if it is a first time setup.
 - ❌ It will **not** automatically create YOUR panel layout.  Use the example to customize your own placement.
 
@@ -142,11 +142,12 @@ This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [
       GRAPH_OUT="${DATA_DIR}/graph.json"
      PANELS_OUT="${DATA_DIR}/panels.json"
   ```
-  - Set the integration polling your PVS.  (defaults to `hass-sunpower`)
+  - Overrride the integration polling your PVS.  (defaults to `hass-sunpower`)
   ```
     INTEGRATION="pvs-hass"  ### "hass-sunpower" (https://github.com/krbaker/hass-sunpower). (default)
                             ### "pvs-hass"      (https://github.com/SunStrong-Management/pvs-hass)
                             ### "custom"        (see below)
+                            ### always run --discover after changing INTEGRATION
   ```
 
   - Execution rights (e.g., `chmod +x /config/scripts/query_panels.sh`).
