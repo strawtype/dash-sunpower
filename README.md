@@ -109,7 +109,7 @@ This Home Assistant dashboard is built for SunPower PV systems using InfluxDB, [
 **Before starting, consider trying this during the day. It is easier to troubleshoot when inverters are online**
 
 1. **Install Required HACS Integrations**
-  - `query_panels.sh` supports both `hass-sunpower` and `pvs-hass` integrations. Defaults to `hass-sunpower`.
+  - `query_panels.sh` supports both `hass-sunpower` and `pvs-hass` integrations (pick one). Defaults to `hass-sunpower`.
   - [Required Integrations](#required-integrations)
 
 2. **Setup InfluxDB**<br>
