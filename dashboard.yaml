@@ -23,7 +23,9 @@ button_card_templates:
           : parseFloat(entity.attributes?.[variables.power_key]);              //JSON ATTRIBUTE, HISTORY uses power_key to match the historical attribute
         if (!power && latest) {                                                //live energy
           units = "kWh"
-          const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
+          const lifetime_key = variables.power_key.includes('current_power_production')
+            ? variables.power_key.replace(/(.*)(current_power_production)/, '$1lifetime_production')
+            : variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
           const produced = parseFloat(states[`sensor.${lifetime_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);   // LIFETIME SENSOR - JSON ATTRIBUTE
           result = Number.isFinite(produced) ? (produced).toFixed(1) : '0';
         }
@@ -58,7 +60,9 @@ button_card_templates:
                 : parseFloat(entity.attributes?.[variables.power_key]);
 
               if (!power && latest) {
-                const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
+                const lifetime_key = variables.power_key.includes('current_power_production')
+                  ? variables.power_key.replace(/(.*)(current_power_production)/, '$1lifetime_production')
+                  : variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                 const produced = parseFloat(states[`sensor.${lifetime_key}`]?.state) - parseFloat(entity.attributes?.[variables.power_key]);  //lifetime sensor - attribute
                 val = Number.isFinite(produced) ? produced : 0;
               }
@@ -402,7 +406,9 @@ views:
                       if (power && latest) {
                         val = parseFloat(states[`sensor.${variables.power_key}`]?.state ?? 0);
                       } else if (!power && latest) {
-                        const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
+                        const lifetime_key = variables.power_key.includes('3_phase_power')
+                          ? variables.power_key.replace(/(.*)(3_phase_power)/, '$1net_lifetime_energy')
+                          : variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                         const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
                         let start
                         start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
@@ -441,7 +447,9 @@ views:
                             if (power && latest) {
                               val = parseFloat(states[`sensor.${variables.power_key}`]?.state ?? 0);
                             } else if (!power && latest) {
-                              const lifetime_key = variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
+                              const lifetime_key = variables.power_key.includes('3_phase_power')
+                                ? variables.power_key.replace(/(.*)(3_phase_power)/, '$1net_lifetime_energy')
+                                : variables.power_key.replace(/(.*)(power)/, '$1lifetime_power');
                               const lifetime = parseFloat(states[`sensor.${lifetime_key}`]?.state ?? 0);
                               let start
                               start = parseFloat(entity.attributes?.[variables.power_key] ?? 0);
